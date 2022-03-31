@@ -32,19 +32,22 @@ class DataTransformer:
         self._categorical_encoding()
         self._generate_features()
         self._split()
-        return self.train_data, self.val_data, self.test_data
+        return self.train_data, self.val_data, self.test_data, self.decode_teams
 
     def _fill_nans(self) -> NoReturn:
         pass
 
     def _categorical_encoding(self) -> NoReturn:
-        pass
+        """ Encode all cat features with LabelEncoder """
+        # labelencoder = LabelEncoder()
+        # for col in ['day_of_week', 'season']:
+        #     self.train.loc[:, col] = labelencoder.fit_transform(self.train.loc[:, col])
+        #     self.test.loc[:, col] = labelencoder.fit_transform(self.test.loc[:, col])
 
     def _split(self) -> NoReturn:
         pass
 
     def _team_encoding(self) -> NoReturn:
-
         all_teams = self.train_data.sort_values(by='home_team').home_team.unique()
         self.teams_labels = {team: number for number, team in enumerate(all_teams)}
         self.decode_teams = {number: team for number, team in enumerate(all_teams)}
