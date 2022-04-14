@@ -20,12 +20,15 @@ def _set_target(row) -> NoReturn:
 class DataTransformer:
 
     def __init__(self, context: Dict):
-        self.train_data = context['train']
-        self.test_data = context['test']
+        self.raw_data = context['data']
         self.cat_features = context['cat_features']
         self.num_features = context['num_features']
+        self.money_features = context['money_features']
+        self.grouped_features = context['grouped_features']
 
+        self.train_data = None
         self.val_data = None
+        self.test_data = None
 
     def run_logic(self):
 
@@ -81,7 +84,7 @@ class DataTransformer:
 
     def _generate_features(self, data) -> pd.DataFrame:
         # self._season_averages()
-        result = self._current_position_and_win_streaks(data)
+        result = self._cumulative_features(data)
         # self._alltime_averages()
         # self._season_totals()
         return result
@@ -92,7 +95,7 @@ class DataTransformer:
     def _season_totals(self) -> NoReturn:
         pass
 
-    def _current_position_and_win_streaks(self, data) -> NoReturn:
+    def _cumulative_features(self, data) -> NoReturn:
 
         query = '((home_team == @team) | (away_team == @team)) & (league == @season)'
 
@@ -112,13 +115,13 @@ class DataTransformer:
 
                     if team_season_data.loc[idx, 'home_team'] == team:
 
-                        data_with_current_points.loc[idx, 'home_current_points'] = current_points
+                        data_with_current_points.loc[idx, 'current_home_points'] = current_points
 
                         current_points += team_season_data.loc[idx, 'target']
 
-                        data_with_current_points.loc[idx, 'home_current_lose_streak'] = current_lose_streak
+                        data_with_current_points.loc[idx, 'current_home_lose_streak'] = current_lose_streak
 
-                        data_with_current_points.loc[idx, 'home_current_win_streak'] = current_win_streak
+                        data_with_current_points.loc[idx, 'current_home_win_streak'] = current_win_streak
 
                         current_lose_streak = self._calculate_lose_streak(current_lose_streak,
                                                                           team_season_data.loc[idx, 'target'])
@@ -128,7 +131,7 @@ class DataTransformer:
 
                     else:
 
-                        data_with_current_points.loc[idx, 'away_current_points'] = current_points
+                        data_with_current_points.loc[idx, 'current_away_points'] = current_points
 
                         home = team_season_data.loc[idx, 'home_scored']
                         away = team_season_data.loc[idx, 'away_scored']
@@ -137,9 +140,9 @@ class DataTransformer:
 
                         current_points += away_match_score
 
-                        data_with_current_points.loc[idx, 'away_current_lose_streak'] = current_lose_streak
+                        data_with_current_points.loc[idx, 'current_away_lose_streak'] = current_lose_streak
 
-                        data_with_current_points.loc[idx, 'away_current_win_streak'] = current_win_streak
+                        data_with_current_points.loc[idx, 'current_away_win_streak'] = current_win_streak
 
                         current_lose_streak = self._calculate_lose_streak(current_lose_streak, away_match_score)
 
