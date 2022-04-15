@@ -29,73 +29,131 @@ class FeatureGenerator:
     def season_average(self):
         pass
 
+    def season_total(self):
+
+        total_features = self.raw_data.copy()
+
+        for league in total_features.league.unique():
+
+            for season in total_features.season.unique():
+
+                season_league_data = total_features.query('(season == @season) & (league == @league)')
+
+                for team in season_league_data.home_team.unique():
+
+                    season_data = season_league_data.query('((home_team == @team) | (away_team == @team))')
+
+                    total_points = 0
+                    total_scored = 0
+                    total_missed = 0
+
+                    for idx in season_data.index:
+
+                        if season_data.loc[idx, 'home_team'] == team:
+
+                            total_points += season_data.loc[idx, 'target']
+                            total_scored += season_data.loc[idx, 'home_scored']
+                            total_missed += season_data.loc[idx, 'away_scored']
+
+                        else:
+
+                            home = season_data.loc[idx, 'home_scored']
+                            away = season_data.loc[idx, 'away_scored']
+
+                            away_match_score = 3 if home < away else 1 if home == away else 0
+
+                            total_points += away_match_score
+                            total_scored += season_data.loc[idx, 'away_scored']
+                            total_missed += season_data.loc[idx, 'home_scored']
+
+                    condition_home = ((total_features.home_team == team) & (total_features.season == season))
+                    condition_away = ((total_features.away_team == team) & (total_features.season == season))
+
+                    total_features.loc[condition_home, 'total_points_home'] = total_points
+                    total_features.loc[condition_away, 'total_points_away'] = total_points
+
+                    total_features.loc[condition_home, 'total_scored_home'] = total_scored
+                    total_features.loc[condition_away, 'total_scored_away'] = total_scored
+
+                    total_features.loc[condition_home, 'total_missed_home'] = total_missed
+                    total_features.loc[condition_away, 'total_missed_away'] = total_missed
+
+                    total_features.loc[condition_home, 'total_diff_home'] = total_scored - total_missed
+                    total_features.loc[condition_away, 'total_diff_away'] = total_scored - total_missed
+
+        self.raw_data = self.raw_data.merge(total_features, how='left')
+
     def cumulative(self):
 
         query = '((home_team == @team) | (away_team == @team)) & (league == @season)'
 
         data_with_current_points = self.raw_data.copy()
 
-        for season in data_with_current_points.league.unique():
+        for league in data_with_current_points.league.unique():
 
-            for team in data_with_current_points.home_team.unique():
+            for season in data_with_current_points.season.unique():
 
-                current_points = 0
-                current_win_streak = 0
-                current_lose_streak = 0
-                current_scored = 0
-                current_missed = 0
+                season_league_data = data_with_current_points.query('(season == @season) & (league == @league)')
 
-                team_season_data = data_with_current_points.query(query)
+                for team in season_league_data.home_team.unique():
 
-                for idx in team_season_data.index:
+                    current_points = 0
+                    current_win_streak = 0
+                    current_lose_streak = 0
+                    current_scored = 0
+                    current_missed = 0
 
-                    if team_season_data.loc[idx, 'home_team'] == team:
+                    team_season_data = season_league_data.query('((home_team == @team) | (away_team == @team))')
 
-                        data_with_current_points.loc[idx, 'current_home_points'] = current_points
-                        current_points += team_season_data.loc[idx, 'target']
+                    for idx in team_season_data.index:
 
-                        data_with_current_points.loc[idx, 'current_home_scored'] = current_scored
-                        current_scored += team_season_data.loc[idx, 'home_scored']
+                        if team_season_data.loc[idx, 'home_team'] == team:
 
-                        data_with_current_points.loc[idx, 'current_home_missed'] = current_missed
-                        current_missed += team_season_data.loc[idx, 'away_scored']
+                            data_with_current_points.loc[idx, 'current_home_points'] = current_points
+                            current_points += team_season_data.loc[idx, 'target']
 
-                        data_with_current_points.loc[idx, 'current_home_diff'] = current_scored - current_missed
+                            data_with_current_points.loc[idx, 'current_home_scored'] = current_scored
+                            current_scored += team_season_data.loc[idx, 'home_scored']
 
-                        data_with_current_points.loc[idx, 'current_home_lose_streak'] = current_lose_streak
-                        data_with_current_points.loc[idx, 'current_home_win_streak'] = current_win_streak
+                            data_with_current_points.loc[idx, 'current_home_missed'] = current_missed
+                            current_missed += team_season_data.loc[idx, 'away_scored']
 
-                        current_lose_streak = self._calculate_lose_streak(current_lose_streak,
-                                                                          team_season_data.loc[idx, 'target'])
+                            data_with_current_points.loc[idx, 'current_home_diff'] = current_scored - current_missed
 
-                        current_win_streak = self._calculate_win_streak(current_win_streak,
-                                                                        team_season_data.loc[idx, 'target'])
+                            data_with_current_points.loc[idx, 'current_home_lose_streak'] = current_lose_streak
+                            data_with_current_points.loc[idx, 'current_home_win_streak'] = current_win_streak
 
-                    else:
+                            current_lose_streak = self._calculate_lose_streak(current_lose_streak,
+                                                                              team_season_data.loc[idx, 'target'])
 
-                        data_with_current_points.loc[idx, 'current_away_points'] = current_points
+                            current_win_streak = self._calculate_win_streak(current_win_streak,
+                                                                            team_season_data.loc[idx, 'target'])
 
-                        home = team_season_data.loc[idx, 'home_scored']
-                        away = team_season_data.loc[idx, 'away_scored']
+                        else:
 
-                        away_match_score = 3 if home < away else 1 if home == away else 0
+                            data_with_current_points.loc[idx, 'current_away_points'] = current_points
 
-                        current_points += away_match_score
+                            home = team_season_data.loc[idx, 'home_scored']
+                            away = team_season_data.loc[idx, 'away_scored']
 
-                        data_with_current_points.loc[idx, 'current_away_lose_streak'] = current_lose_streak
-                        data_with_current_points.loc[idx, 'current_away_win_streak'] = current_win_streak
+                            away_match_score = 3 if home < away else 1 if home == away else 0
 
-                        data_with_current_points.loc[idx, 'current_away_scored'] = current_scored
-                        current_scored += team_season_data.loc[idx, 'away_scored']
+                            current_points += away_match_score
 
-                        data_with_current_points.loc[idx, 'current_away_missed'] = current_missed
-                        current_missed += team_season_data.loc[idx, 'home_scored']
+                            data_with_current_points.loc[idx, 'current_away_lose_streak'] = current_lose_streak
+                            data_with_current_points.loc[idx, 'current_away_win_streak'] = current_win_streak
 
-                        data_with_current_points.loc[idx, 'current_away_diff'] = current_scored - current_missed
+                            data_with_current_points.loc[idx, 'current_away_scored'] = current_scored
+                            current_scored += team_season_data.loc[idx, 'away_scored']
 
-                        current_lose_streak = self._calculate_lose_streak(current_lose_streak, away_match_score)
+                            data_with_current_points.loc[idx, 'current_away_missed'] = current_missed
+                            current_missed += team_season_data.loc[idx, 'home_scored']
 
-                        current_win_streak = self._calculate_win_streak(current_win_streak, away_match_score)
+                            data_with_current_points.loc[idx, 'current_away_diff'] = current_scored - current_missed
+
+                            current_lose_streak = self._calculate_lose_streak(current_lose_streak, away_match_score)
+
+                            current_win_streak = self._calculate_win_streak(current_win_streak, away_match_score)
 
         data_with_current_points.home_current_points = data_with_current_points.home_current_points.astype(int)
         data_with_current_points.away_current_points = data_with_current_points.away_current_points.astype(int)
