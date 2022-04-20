@@ -1,27 +1,56 @@
 import pandas as pd
 import numpy as np
 
-from typing import List, Tuple, Dict, NoReturn
+from typing import List, Tuple, Dict, Any, Optional, NoReturn
 
 
 class FeatureGenerator:
     """ Class to generate new features"""
+
     def __init__(self,
                  data: pd.DataFrame,
-                 grouped_features: Dict[List],
-                 cat_features: Tuple,
-                 numeric_features: Tuple,
-                 money_features: Tuple):
+                 features: Dict,
+                 ):
 
-        self.raw_data = data
-        self.grouped_features = grouped_features
-        self.cat_features = cat_features
-        self.numeric_features = numeric_features
-        self.money_features = money_features
+        self.data = data
+
+        self.cat_features = features['cat_features']
+        self.numeric_features = features['num_features']
+
+        grouped_features = features['grouped_features']
+        self.money_features = grouped_features['money_features']
+        self.manager_features = grouped_features['manager_features']
+        self.base_features = grouped_features['base_features']
+
+        self.team_names = grouped_features['names']['team_names']
+        self.country_names = grouped_features['names']['country_names']
+        self.city_names = grouped_features['names']['city_names']
+        self.manager_names = grouped_features['names']['manager_names']
+
+        self.common_squad_features = grouped_features['squad_features']['common_features']
+        self.detail_squad_features = grouped_features['squad_features']['detail_features']
+
+        self.city_features = grouped_features['city_features']
+
+        self.double_chance_features = grouped_features['coefficients']['double_chance_features']
+        self.total_coef_features = grouped_features['coefficients']['total_coef_features']
+        self.handicap_features = grouped_features['coefficients']['handicap_features']
+        self.half_features = grouped_features['coefficients']['half_features']
+        self.odd_features = grouped_features['coefficients']['odd_features']
+        self.correct_score_features = grouped_features['coefficients']['correct_score_features']
+        self.time_match_features = grouped_features['coefficients']['time_match_features']
+        self.both_scored_features = grouped_features['coefficients']['both_scored_features']
 
         self.train_data = pd.DataFrame()
         self.test_data = pd.DataFrame()
         self.val_data = pd.DataFrame()
+
+    def run_generator(self):
+
+        self.cumulative()
+        self.log_features()
+
+        return self.data
 
     def alltime_average(self):
         pass
@@ -31,7 +60,7 @@ class FeatureGenerator:
 
     def season_total(self):
 
-        total_features = self.raw_data.copy()
+        total_features = self.data.copy()
 
         for league in total_features.league.unique():
 
@@ -81,13 +110,13 @@ class FeatureGenerator:
                     total_features.loc[condition_home, 'total_diff_home'] = total_scored - total_missed
                     total_features.loc[condition_away, 'total_diff_away'] = total_scored - total_missed
 
-        self.raw_data = self.raw_data.merge(total_features, how='left')
+        self.data = self.data.merge(total_features, how='left')
 
     def cumulative(self):
 
         query = '((home_team == @team) | (away_team == @team)) & (league == @season)'
 
-        data_with_current_points = self.raw_data.copy()
+        data_with_current_points = self.data.copy()
 
         for league in data_with_current_points.league.unique():
 
@@ -155,18 +184,18 @@ class FeatureGenerator:
 
                             current_win_streak = self._calculate_win_streak(current_win_streak, away_match_score)
 
-        data_with_current_points.home_current_points = data_with_current_points.home_current_points.astype(int)
-        data_with_current_points.away_current_points = data_with_current_points.away_current_points.astype(int)
-        data_with_current_points.away_current_win_streak = data_with_current_points.away_current_win_streak.astype(
+        data_with_current_points.current_home_points = data_with_current_points.current_home_points.astype(int)
+        data_with_current_points.current_away_points = data_with_current_points.current_away_points.astype(int)
+        data_with_current_points.current_away_win_streak = data_with_current_points.current_away_win_streak.astype(
             int)
-        data_with_current_points.away_current_lose_streak = data_with_current_points.away_current_lose_streak.astype(
+        data_with_current_points.current_away_lose_streak = data_with_current_points.current_away_lose_streak.astype(
             int)
-        data_with_current_points.home_current_win_streak = data_with_current_points.home_current_win_streak.astype(
+        data_with_current_points.current_home_win_streak = data_with_current_points.current_home_win_streak.astype(
             int)
-        data_with_current_points.home_current_lose_streak = data_with_current_points.home_current_lose_streak.astype(
+        data_with_current_points.current_home_lose_streak = data_with_current_points.current_home_lose_streak.astype(
             int)
 
-        result = self.raw_data.merge(data_with_current_points, how='left')
+        result = self.data.merge(data_with_current_points, how='left')
 
         return result
 
@@ -201,5 +230,4 @@ class FeatureGenerator:
     def log_features(self) -> NoReturn:
 
         for feature in self.money_features:
-            self.raw_data[f"log_{feature}"] = self.raw_data[feature].apply(np.log)
-
+            self.data[f"log_{feature}"] = np.log(self.data[feature].values + 1)
