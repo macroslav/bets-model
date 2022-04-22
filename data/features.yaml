@@ -9,8 +9,6 @@ base_features:
   - 'league_level'
   - 'home_team'
   - 'away_team'
-  - 'home_scored'
-  - 'away_scored'
   - 'day'
 
 scored_features:

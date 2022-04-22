@@ -142,12 +142,12 @@ class FeatureGenerator:
                             current_points += team_season_data.loc[idx, 'target']
 
                             data_with_current_points.loc[idx, 'current_home_scored'] = current_scored
-                            current_scored += team_season_data.loc[idx, 'home_scored']
-
                             data_with_current_points.loc[idx, 'current_home_missed'] = current_missed
-                            current_missed += team_season_data.loc[idx, 'away_scored']
 
                             data_with_current_points.loc[idx, 'current_home_diff'] = current_scored - current_missed
+
+                            current_scored += team_season_data.loc[idx, 'home_scored']
+                            current_missed += team_season_data.loc[idx, 'away_scored']
 
                             data_with_current_points.loc[idx, 'current_home_lose_streak'] = current_lose_streak
                             data_with_current_points.loc[idx, 'current_home_win_streak'] = current_win_streak
@@ -173,12 +173,11 @@ class FeatureGenerator:
                             data_with_current_points.loc[idx, 'current_away_win_streak'] = current_win_streak
 
                             data_with_current_points.loc[idx, 'current_away_scored'] = current_scored
-                            current_scored += team_season_data.loc[idx, 'away_scored']
-
                             data_with_current_points.loc[idx, 'current_away_missed'] = current_missed
-                            current_missed += team_season_data.loc[idx, 'home_scored']
-
                             data_with_current_points.loc[idx, 'current_away_diff'] = current_scored - current_missed
+
+                            current_scored += team_season_data.loc[idx, 'away_scored']
+                            current_missed += team_season_data.loc[idx, 'home_scored']
 
                             current_lose_streak = self._calculate_lose_streak(current_lose_streak, away_match_score)
 
@@ -195,9 +194,7 @@ class FeatureGenerator:
         data_with_current_points.current_home_lose_streak = data_with_current_points.current_home_lose_streak.astype(
             int)
 
-        result = self.data.merge(data_with_current_points, how='left')
-
-        return result
+        self.data = self.data.merge(data_with_current_points, how='left')
 
     def _calculate_win_streak(self, actual_win_streak: int, match_result: int) -> int:
 

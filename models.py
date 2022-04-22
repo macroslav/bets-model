@@ -27,7 +27,7 @@ class BaseModel(Protocol):
         ...
 
 
-class BoostingModel():
+class BoostingModel:
     """
         Implementation of boosting model
     """
