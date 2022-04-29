@@ -168,13 +168,20 @@ class ROIChecker:
             else:
                 skipped_bets += 1
 
-        average_win_coef = win_coef / win_bets
+        try:
+            average_win_coef = win_coef / win_bets
+
+        except ZeroDivisionError:
+            average_win_coef = 0
 
         self.batch_static_bank_values.append(self.current_static_bank)
 
         average_lose_coef = lose_coef / lose_bets
         average_coef = total_coef / accepted_bets
-        percent_profit = (self.current_static_bank - initial_bank) / initial_bank * 100
+        try:
+            percent_profit = (self.current_static_bank - initial_bank) / initial_bank * 100
+        except:
+            percent_profit = 0
 
         result = {'skipped_bets': skipped_bets,
                   'accepted_bets': accepted_bets,
