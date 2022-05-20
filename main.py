@@ -16,6 +16,7 @@ def main():
     parser.add_argument('--mode',
                         type=str,
                         default='fit',
+                        required=True,
                         help='choose mode: fit or predict (default: fit)'
                         )
 
@@ -42,10 +43,12 @@ def main():
                         default='configs/',
                         help='Define configs directory path (default: configs/)')
 
+    args = parser.parse_args()
     print(f"Config dir path is {parser.parse_args().config_dir}")
-    print(f"Config dir path is {parser.parse_args().target}")
-    print(f"Config dir path is {parser.parse_args().mode}")
+    print(f"Config target is {parser.parse_args().target}")
+    print(f"Config mode is {parser.parse_args().mode}")
 
 
 if __name__ == '__main__':
     main()
+

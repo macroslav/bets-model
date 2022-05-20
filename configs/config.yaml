@@ -1,2 +1,3 @@
 paths:
-  models: ./models_versions
+  models: models_versions
+  train_data: data/top_5_leagues.csv
