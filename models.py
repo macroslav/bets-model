@@ -1,7 +1,6 @@
 from catboost import CatBoostClassifier, CatBoostRegressor, Pool, cv
 from sklearn.linear_model import LogisticRegression, LinearRegression, SGDClassifier
 from sklearn.ensemble import RandomForestClassifier, StackingClassifier
-import tensorflow as tf
 
 from typing import Protocol, Dict, List, Optional, Any
 
@@ -91,33 +90,3 @@ class BoostingModel:
     def get_feature_importances(self):
 
         return self.model.get_feature_importance()
-
-
-class RegressionNeuralNetwork:
-
-        def __init__(self, data):
-
-            self.train = data['train']
-            self.val = data['val']
-            self.test = data['test']
-            self.target = data['target']
-            self.cat_features = data['cat_features']
-
-            self.input_shape = self.train.shape
-
-            self.model = tf.keras.Sequential()
-
-        def fit(self):
-            self.model.fit()
-
-        def build_and_compile_model(self, norm):
-
-            self.model = tf.keras.Sequential([
-                norm,
-                tf.keras.layers.Dense(64, activation='relu'),
-                tf.keras.layers.Dense(64, activation='relu'),
-                tf.keras.layers.Dense(1)
-            ])
-
-            self.model.compile(loss='mean_absolute_error',
-                               optimizer=tf.keras.optimizers.Adam(0.001))

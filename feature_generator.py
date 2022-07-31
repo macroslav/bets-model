@@ -47,7 +47,7 @@ class FeatureGenerator:
 
     def run_generator(self):
 
-        self.cumulative()
+        # self.cumulative()
         self.log_features()
 
         return self.data
@@ -182,11 +182,13 @@ class FeatureGenerator:
                             current_lose_streak = self._calculate_lose_streak(current_lose_streak, away_match_score)
 
                             current_win_streak = self._calculate_win_streak(current_win_streak, away_match_score)
-
         data_with_current_points.current_home_points = data_with_current_points.current_home_points.astype(int)
+        data_with_current_points.current_away_points.fillna(0, inplace=True)
         data_with_current_points.current_away_points = data_with_current_points.current_away_points.astype(int)
+        data_with_current_points.current_away_win_streak.fillna(0, inplace=True)
         data_with_current_points.current_away_win_streak = data_with_current_points.current_away_win_streak.astype(
             int)
+        data_with_current_points.current_away_lose_streak.fillna(0, inplace=True)
         data_with_current_points.current_away_lose_streak = data_with_current_points.current_away_lose_streak.astype(
             int)
         data_with_current_points.current_home_win_streak = data_with_current_points.current_home_win_streak.astype(
