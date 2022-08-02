@@ -1,14 +1,9 @@
-from catboost import CatBoostClassifier, CatBoostRegressor, Pool, cv
-from sklearn.linear_model import LogisticRegression, LinearRegression, SGDClassifier
-from sklearn.ensemble import RandomForestClassifier, StackingClassifier
+from catboost import CatBoostClassifier, Pool
 
-from typing import Protocol, Dict, List, Optional, Any
-
-from config import ModelConfig
+from typing import Protocol, Dict
 
 
 class BaseModel(Protocol):
-
     """
         Implementation of base model class
     """
@@ -87,6 +82,10 @@ class BoostingModel:
 
         return self.preds_proba
 
-    def get_feature_importances(self):
+    def get_feature_importances(self, importance_type='catboost'):
 
-        return self.model.get_feature_importance()
+        if importance_type == 'catboost':
+            return self.model.get_feature_importance()
+
+        elif importance_type == 'permutation':
+            return
