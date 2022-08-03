@@ -150,7 +150,7 @@ class Predictor:
                     cursor.execute(
                         "INSERT INTO predictions "
                         "(home_team, away_team, league, country, season, league_level, timestamp_date, bet, bet_type, coef, chance, day, hours, link)"
-                        " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                        " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                         list(result.values()),
                     )
                     conn.commit()

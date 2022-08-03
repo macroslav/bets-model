@@ -16,16 +16,24 @@ def _remove_by_key(original_dict: Dict, key: str):
     return changed_dict
 
 
+def _set_target(row) -> NoReturn:
+    """ Set target feature from score """
+
+    if row.home_scored > row.away_scored:
+        return 3
+    elif row.home_scored == row.away_scored:
+        return 1
+    else:
+        return 0
+
+
 class DataTransformer:
 
     def __init__(self, context: Dict):
-        self.train_data = context['train']
-        self.test_data = context['test']
+        self.train_data = context['data']
         self.features = context['features']
-        self.mode = context['mode']
-        self.format = context['format']
-        self.target = context['target']
 
+        self.transformed_data = self.train_data.copy()
         self.val_data = None
 
         self.cat_features = self.features['cat_features']
@@ -44,7 +52,7 @@ class DataTransformer:
 
         self._fill_nans()
 
-        self.transformed_data['target'] = self.transformed_data.apply(self._set_result_target, axis=1)
+        self.transformed_data['target'] = self.transformed_data.apply(_set_target, axis=1)
 
         self._names_encoding()
         self._categorical_encoding()
