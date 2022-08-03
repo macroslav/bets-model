@@ -21,6 +21,7 @@ class Predictor:
         self.raw_future_data.reset_index(inplace=True, drop=True)
 
         self.future_data = None
+        self.links = None
 
         with open(path_to_features) as f:
             self.all_features_dict = yaml.safe_load(f)
@@ -41,6 +42,7 @@ class Predictor:
         preprocessed_data['day'] = pd.to_datetime(preprocessed_data.date, format='%d.%m.%Y')
         preprocessed_data['year'] = preprocessed_data['day'].dt.year
         preprocessed_data = preprocessed_data.sort_values(by='timestamp_date')
+        self.links = preprocessed_data['link'].values
         preprocessed_data = preprocessed_data.drop(columns=['date', 'link'])
         drop_index = preprocessed_data[preprocessed_data.home_goalkeepers_average_age.isna()].index
         preprocessed_data = preprocessed_data.drop(index=drop_index)
@@ -135,7 +137,8 @@ class Predictor:
                     'coef': coef,
                     'chance': chance,
                     'day': current_datetime.strftime('%d.%m.%Y'),
-                    'hours': current_datetime.strftime('%H:%M')
+                    'hours': current_datetime.strftime('%H:%M'),
+                    'link': self.links[i],
                 }
                 results.append(result)
         return results
@@ -146,7 +149,7 @@ class Predictor:
                 for result in results:
                     cursor.execute(
                         "INSERT INTO predictions "
-                        "(home_team, away_team, league, country, season, league_level, timestamp_date, bet, bet_type, coef, chance, day, hours)"
+                        "(home_team, away_team, league, country, season, league_level, timestamp_date, bet, bet_type, coef, chance, day, hours, link)"
                         " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                         list(result.values()),
                     )
