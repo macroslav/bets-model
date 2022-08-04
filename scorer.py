@@ -18,10 +18,10 @@ class BaseScorer(Protocol):
 class ROIChecker:
 
     def __init__(self, decode_labels: Dict,
-                 start_bank: int = 1000,
+                 start_bank: int = 10000,
                  static_bet: int = 100,
-                 percent_of_bank: float = 0.1,
-                 roi_threshold: float = 0.):
+                 percent_of_bank: float = 0.01,
+                 roi_threshold: float = 2):
 
         self.decoder = decode_labels
 
@@ -145,7 +145,7 @@ class ROIChecker:
 
                 if RESULTS[row.choice] == row.result:
 
-                    current_profit = self.static_bet * (accepted_coef - 1)
+                    current_profit = self.dynamic_bet * (accepted_coef - 1)
                     total_profit += current_profit
                     self.update_static_bank(self.current_static_bank + current_profit)
                     win_coef += accepted_coef
@@ -153,10 +153,10 @@ class ROIChecker:
                     win_bets += 1
 
                 else:
-                    total_profit -= self.static_bet
-                    self.update_static_bank(self.current_static_bank - self.static_bet)
+                    total_profit -= self.dynamic_bet
+                    self.update_static_bank(self.current_static_bank - self.dynamic_bet)
                     lose_coef += accepted_coef
-                    lose_bank -= self.static_bet
+                    lose_bank -= self.dynamic_bet
                     lose_bets += 1
 
                 total_coef += accepted_coef
@@ -167,18 +167,22 @@ class ROIChecker:
 
         try:
             average_win_coef = win_coef / win_bets
-
         except ZeroDivisionError:
             average_win_coef = 0
 
         self.batch_static_bank_values.append(self.current_static_bank)
-
-        average_lose_coef = lose_coef / lose_bets
-        average_coef = total_coef / accepted_bets
         try:
             percent_profit = (self.current_static_bank - initial_bank) / initial_bank * 100
-        except:
+        except ZeroDivisionError:
             percent_profit = 0
+        try:
+            average_lose_coef = lose_coef / lose_bets
+        except ZeroDivisionError:
+            average_lose_coef = 0
+        try:
+            average_coef = total_coef / accepted_bets
+        except ZeroDivisionError:
+            average_coef = 0
 
         result = {'skipped_bets': skipped_bets,
                   'accepted_bets': accepted_bets,
@@ -193,9 +197,12 @@ class ROIChecker:
                   'average_coef': average_coef,
                   'average_win_coef': average_win_coef,
                   'average_lose_coef': average_lose_coef,
-                  'win_rate': win_bets / accepted_bets
+                  'win_rate': win_bets / accepted_bets if accepted_bets > 0 else 0
                   }
-
+        print(self.current_static_bank)
+        print(result)
+        self.dynamic_bet = self.current_static_bank * 0.01
+        print('bet', self.dynamic_bet)
         self.full_static_info.append(result)
 
     def update_static_bank(self, bank: float):
