@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from typing import List, Tuple, Dict, Any, Optional, NoReturn
+from typing import Dict, NoReturn
 
 
 class FeatureGenerator:
@@ -35,10 +35,6 @@ class FeatureGenerator:
         self.double_chance_features = grouped_features['coefficients']['double_chance_features']
         self.total_coef_features = grouped_features['coefficients']['total_coef_features']
         self.handicap_features = grouped_features['coefficients']['handicap_features']
-        self.half_features = grouped_features['coefficients']['half_features']
-        self.odd_features = grouped_features['coefficients']['odd_features']
-        self.correct_score_features = grouped_features['coefficients']['correct_score_features']
-        self.time_match_features = grouped_features['coefficients']['time_match_features']
         self.both_scored_features = grouped_features['coefficients']['both_scored_features']
 
         self.train_data = pd.DataFrame()

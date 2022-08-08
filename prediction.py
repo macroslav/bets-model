@@ -89,6 +89,7 @@ class Predictor:
             'learning_rate': 0.03,
             'loss_function': 'MultiClass',
             'verbose': 250,
+            'random_state': 322,
         }
 
         model = CatBoostClassifier(**model_params)
@@ -148,7 +149,7 @@ class Predictor:
             with conn.cursor() as cursor:
                 for result in results:
                     cursor.execute(
-                        "INSERT INTO predictions "
+                        "INSERT INTO predictions"
                         "(home_team, away_team, league, country, season, league_level, timestamp_date, bet, bet_type, coef, chance, day, hours, link)"
                         " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                         list(result.values()),

@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import accuracy_score, roc_auc_score
-from typing import Protocol, Dict, List
-
-from models import BaseModel
+from typing import Protocol, Dict
 
 RESULTS = {'home': 3, 'draw': 1, 'away': 0}
 COLS = {'home': 'home_win_rate', 'draw': 'draw_rate', 'away': 'away_win_rate'}
