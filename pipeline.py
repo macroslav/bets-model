@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from data_transformer import DataTransformer
 from scorer import ROIChecker
 
-DATA_PATH = 'data/top_5_leagues.csv'
+DATA_PATH = 'data/lower_top_5_leagues.csv'
 FEATURES_PATH = 'data/features.yaml'
 
 raw_train_data = pd.read_csv(DATA_PATH)
@@ -42,12 +42,8 @@ for key, item in all_features_dict.items():
 
 def base_data_preprocess(data):
     preprocessed_data = data.copy()
-
-    preprocessed_data['day'] = pd.to_datetime(preprocessed_data.date, format='%d.%m.%Y')
-    preprocessed_data['year'] = preprocessed_data['day'].dt.year
-    preprocessed_data.date = preprocessed_data.day.values.astype(np.int64) // 10 ** 9
-    preprocessed_data = preprocessed_data.sort_values(by='date')
-    preprocessed_data = preprocessed_data.drop(columns=['link'])
+    preprocessed_data = preprocessed_data.sort_values(by='timestamp_date')
+    preprocessed_data = preprocessed_data.drop(columns=['date', 'link'])
     drop_index = preprocessed_data[preprocessed_data.home_goalkeepers_average_age.isna()].index
     preprocessed_data = preprocessed_data.drop(index=drop_index)
 
@@ -70,48 +66,75 @@ transformer_context = {'data': train_data,
                        }
 
 transformer = DataTransformer(transformer_context)
-train, val, test, decode_labels, encode_labels = transformer.run_logic()
+train = transformer.run_logic()
+train = train.reset_index(drop=True)
 
 cat_features = list(categorical_features)
 
 
-def get_cv_data(train_data, train_initial_size=36050, window=5000):
+def get_cv_data(train_data, train_initial_size=35600, window=500):
     for index in range(0, train_data.shape[0] - train_initial_size - window + 1, window):
         train_cv = train_data.loc[:train_initial_size + index]
         val_cv = train_data.loc[train_initial_size + index: train_initial_size + index + window]
         yield train_cv, val_cv
 
 
-cv_scorer = ROIChecker(decode_labels=decode_labels['team_names'])
+cv_scorer = ROIChecker()
 
-model_params = {'n_estimators': 1000,
-                'learning_rate': 0.03,
-                'loss_function': 'MultiClass',
-                'verbose': 250
-                }
+model_params = {
+    'n_estimators': 1000,
+    'depth': 10,
+    'learning_rate': 0.03,
+    'loss_function': 'Logloss',
+    'verbose': 250,
+    'random_state': 322,
+}
 
-cv_model = CatBoostClassifier(**model_params)
+cv_model_result = CatBoostClassifier(**{
+    'n_estimators': 1000,
+    'loss_function': 'MultiClass',
+    'depth': 10,
+    'learning_rate': 0.03,
+    'verbose': 250,
+    'random_state': 322,
+})
+cv_model_total = CatBoostClassifier(**model_params)
+cv_model_both = CatBoostClassifier(**model_params)
 
 iteration = 0
 for cv_train, cv_test in get_cv_data(train):
-    cv_y_train = cv_train.target
-    cv_X_train = cv_train.drop(columns=['target'])
-    cv_y_test = cv_test.target
-    cv_X_test = cv_test.drop(columns=['target'])
+    cv_y_train_result = cv_train.result_target
+    cv_y_train_total = cv_train.total_target
+    cv_y_train_both = cv_train.both_target
+    cv_X_train = cv_train.drop(columns=['result_target', 'total_target', 'both_target'])
 
-    cv_model.fit(cv_X_train, cv_y_train)
+    cv_model_result.fit(cv_X_train, cv_y_train_result)
+    cv_model_total.fit(cv_X_train, cv_y_train_total)
+    cv_model_both.fit(cv_X_train, cv_y_train_both)
 
-    preds_proba = cv_model.predict_proba(cv_X_test)
-    preds_class = cv_model.predict(cv_X_test)
+    result_target = cv_test.result_target
+    total_target = cv_test.total_target
+    both_target = cv_test.both_target
+    cv_X_test = cv_test.drop(columns=['result_target', 'total_target', 'both_target'])
 
-    cv_scorer.run_check(cv_X_test, cv_y_test, preds_proba, preds_class)
+    preds_proba_result = cv_model_result.predict_proba(cv_X_test)
+    preds_proba_total = cv_model_total.predict_proba(cv_X_test)
+    preds_proba_both = cv_model_both.predict_proba(cv_X_test)
+
+    cv_scorer.run_check(
+        cv_X_test,
+        result_target,
+        total_target,
+        both_target,
+        preds_proba_result=preds_proba_result,
+        preds_proba_total=preds_proba_total,
+        preds_proba_both=preds_proba_both,
+    )
 
     iteration += 1
     print(f"Iteration #{iteration} complete!")
     print('_______')
 
 dynamic_info, static_info = cv_scorer.return_info()
-from pprint import pprint
-pprint(static_info)
 sns.lineplot(x=[i for i in range(len(static_info[2]))], y=static_info[2])
-plt.savefig("top_5_leagues_2021.png")
+plt.savefig("low_features.png")

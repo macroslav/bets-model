@@ -16,15 +16,29 @@ def _remove_by_key(original_dict: Dict, key: str):
     return changed_dict
 
 
-def _set_target(row) -> NoReturn:
-    """ Set target feature from score """
+def _set_target(row) -> int:
 
     if row.home_scored > row.away_scored:
         return 3
     elif row.home_scored == row.away_scored:
         return 1
-    else:
-        return 0
+    return 0
+
+
+def _set_total_target(row) -> int:
+
+    if row.home_scored + row.away_scored > 2.5:
+        return 1
+
+    return 0
+
+
+def _set_both_target(row) -> int:
+
+    if row.home_scored > 0 and row.away_scored > 0:
+        return 1
+
+    return 0
 
 
 class DataTransformer:
@@ -52,7 +66,9 @@ class DataTransformer:
 
         self._fill_nans()
 
-        self.transformed_data['target'] = self.transformed_data.apply(_set_target, axis=1)
+        self.transformed_data['result_target'] = self.transformed_data.apply(_set_target, axis=1)
+        self.transformed_data['total_target'] = self.transformed_data.apply(_set_total_target, axis=1)
+        self.transformed_data['both_target'] = self.transformed_data.apply(_set_both_target, axis=1)
 
         self._names_encoding()
         self._categorical_encoding()
@@ -90,7 +106,10 @@ class DataTransformer:
         """ Encode all cat features with LabelEncoder """
         label_encoder = LabelEncoder()
         for col in self.cat_features:
-            self.transformed_data.loc[:, col] = label_encoder.fit_transform(self.transformed_data.loc[:, col])
+            try:
+                self.transformed_data.loc[:, col] = label_encoder.fit_transform(self.transformed_data.loc[:, col])
+            except Exception:
+                pass
             # self.test_data.loc[:, col] = label_encoder.fit_transform(self.test_data.loc[:, col])
 
     def _split(self) -> NoReturn:

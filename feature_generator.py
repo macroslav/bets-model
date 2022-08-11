@@ -225,4 +225,7 @@ class FeatureGenerator:
     def log_features(self) -> NoReturn:
 
         for feature in self.money_features:
-            self.data[f"log_{feature}"] = np.log(self.data[feature].values + 1)
+            try:
+                self.data[f"log_{feature}"] = np.log(self.data[feature].values + 1)
+            except KeyError:
+                pass

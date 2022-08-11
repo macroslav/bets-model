@@ -38,9 +38,6 @@ class Predictor:
 
     def base_data_preprocess(self, data):
         preprocessed_data = data.copy()
-
-        preprocessed_data['day'] = pd.to_datetime(preprocessed_data.date, format='%d.%m.%Y')
-        preprocessed_data['year'] = preprocessed_data['day'].dt.year
         preprocessed_data = preprocessed_data.sort_values(by='timestamp_date')
         self.links = preprocessed_data['link'].values
         preprocessed_data = preprocessed_data.drop(columns=['date', 'link'])
