@@ -87,6 +87,7 @@ model_params = {
     'learning_rate': 0.03,
     'loss_function': 'Logloss',
     'verbose': 250,
+    'task_type': 'GPU',
     'random_state': 322,
 }
 
@@ -96,6 +97,7 @@ cv_model_result = CatBoostClassifier(**{
     'depth': 10,
     'learning_rate': 0.03,
     'verbose': 250,
+    'task_type': 'GPU',
     'random_state': 322,
 })
 cv_model_total = CatBoostClassifier(**model_params)
