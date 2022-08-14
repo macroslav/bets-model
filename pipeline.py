@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from data_transformer import DataTransformer
 from scorer import ROIChecker
 
-DATA_PATH = 'data/lower_top_5_leagues.csv'
+DATA_PATH = 'data/full_top_5_leagues.csv'
 FEATURES_PATH = 'data/features.yaml'
 
 raw_train_data = pd.read_csv(DATA_PATH)
@@ -66,20 +66,20 @@ transformer_context = {'data': train_data,
                        }
 
 transformer = DataTransformer(transformer_context)
-train = transformer.run_logic()
+train, decode_labels = transformer.run_logic()
 train = train.reset_index(drop=True)
 
 cat_features = list(categorical_features)
 
 
-def get_cv_data(train_data, train_initial_size=35600, window=500):
+def get_cv_data(train_data, train_initial_size=1600, window=500):
     for index in range(0, train_data.shape[0] - train_initial_size - window + 1, window):
         train_cv = train_data.loc[:train_initial_size + index]
         val_cv = train_data.loc[train_initial_size + index: train_initial_size + index + window]
         yield train_cv, val_cv
 
 
-cv_scorer = ROIChecker()
+cv_scorer = ROIChecker(country_names=decode_labels['country_names'], leagues=decode_labels['leagues'])
 
 model_params = {
     'n_estimators': 1000,
@@ -87,21 +87,19 @@ model_params = {
     'learning_rate': 0.03,
     'loss_function': 'Logloss',
     'verbose': 250,
-    'task_type': 'GPU',
     'random_state': 322,
 }
 
 cv_model_result = CatBoostClassifier(**{
-    'n_estimators': 1000,
+    'n_estimators': 500,
     'loss_function': 'MultiClass',
-    'depth': 10,
+    'depth': 6,
     'learning_rate': 0.03,
     'verbose': 250,
-    'task_type': 'GPU',
     'random_state': 322,
 })
-cv_model_total = CatBoostClassifier(**model_params)
-cv_model_both = CatBoostClassifier(**model_params)
+# cv_model_total = CatBoostClassifier(**model_params)
+# cv_model_both = CatBoostClassifier(**model_params)
 
 iteration = 0
 for cv_train, cv_test in get_cv_data(train):
@@ -111,8 +109,8 @@ for cv_train, cv_test in get_cv_data(train):
     cv_X_train = cv_train.drop(columns=['result_target', 'total_target', 'both_target'])
 
     cv_model_result.fit(cv_X_train, cv_y_train_result)
-    cv_model_total.fit(cv_X_train, cv_y_train_total)
-    cv_model_both.fit(cv_X_train, cv_y_train_both)
+    # cv_model_total.fit(cv_X_train, cv_y_train_total)
+    # cv_model_both.fit(cv_X_train, cv_y_train_both)
 
     result_target = cv_test.result_target
     total_target = cv_test.total_target
@@ -120,8 +118,8 @@ for cv_train, cv_test in get_cv_data(train):
     cv_X_test = cv_test.drop(columns=['result_target', 'total_target', 'both_target'])
 
     preds_proba_result = cv_model_result.predict_proba(cv_X_test)
-    preds_proba_total = cv_model_total.predict_proba(cv_X_test)
-    preds_proba_both = cv_model_both.predict_proba(cv_X_test)
+    # preds_proba_total = cv_model_total.predict_proba(cv_X_test)
+    # preds_proba_both = cv_model_both.predict_proba(cv_X_test)
 
     cv_scorer.run_check(
         cv_X_test,
@@ -129,8 +127,6 @@ for cv_train, cv_test in get_cv_data(train):
         total_target,
         both_target,
         preds_proba_result=preds_proba_result,
-        preds_proba_total=preds_proba_total,
-        preds_proba_both=preds_proba_both,
     )
 
     iteration += 1

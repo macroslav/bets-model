@@ -79,7 +79,7 @@ class DataTransformer:
 
         self._split()
 
-        return self.train_data
+        return self.transformed_data, self.decode_labels
 
     def run_future_logic(self):
 
@@ -106,11 +106,12 @@ class DataTransformer:
         """ Encode all cat features with LabelEncoder """
         label_encoder = LabelEncoder()
         for col in self.cat_features:
-            try:
-                self.transformed_data.loc[:, col] = label_encoder.fit_transform(self.transformed_data.loc[:, col])
-            except Exception:
-                pass
-            # self.test_data.loc[:, col] = label_encoder.fit_transform(self.test_data.loc[:, col])
+            if col not in ['country', 'home_manager_country', 'away_manager_country', 'league']:
+                try:
+                    self.transformed_data.loc[:, col] = label_encoder.fit_transform(self.transformed_data.loc[:, col])
+                except Exception:
+                    pass
+                # self.test_data.loc[:, col] = label_encoder.fit_transform(self.test_data.loc[:, col])
 
     def _split(self) -> NoReturn:
 
@@ -134,20 +135,25 @@ class DataTransformer:
             # self.test_data['home_team'] = self.test_data['home_team'].map(self.encode_labels)
             # self.test_data['away_team'] = self.test_data['away_team'].map(self.encode_labels)
 
-        team, home_manager, away_manager = self.country_names
-        all_countries = list(self.transformed_data.sort_values(by=team)[team].unique())
+        country, home_manager, away_manager = self.country_names
+        all_countries = list(self.transformed_data.sort_values(by=country)[country].unique())
         all_countries += list(self.transformed_data.sort_values(by=home_manager)[home_manager].unique())
         all_countries += list(self.transformed_data.sort_values(by=away_manager)[away_manager].unique())
         unique_countries = set(all_countries)
 
+        leagues = list(self.transformed_data.sort_values(by='league')['league'].unique())
+
         self.encode_labels['country_names'] = {value: number for number, value in enumerate(unique_countries)}
         self.decode_labels['country_names'] = {number: value for number, value in enumerate(unique_countries)}
+        self.encode_labels['leagues'] = {value: number for number, value in enumerate(leagues)}
+        self.decode_labels['leagues'] = {number: value for number, value in enumerate(leagues)}
 
-        self.transformed_data[team] = self.transformed_data[team].map(self.encode_labels['country_names'])
+        self.transformed_data[country] = self.transformed_data[country].map(self.encode_labels['country_names'])
         self.transformed_data[home_manager] = self.transformed_data[home_manager].map(
             self.encode_labels['country_names'])
         self.transformed_data[away_manager] = self.transformed_data[away_manager].map(
             self.encode_labels['country_names'])
+        self.transformed_data['league'] = self.transformed_data['league'].map(self.encode_labels['leagues'])
 
     def _generate_features(self) -> NoReturn:
 
