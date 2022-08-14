@@ -5,6 +5,7 @@ import argparse
 # from data_transformer import DataTransformer
 # from models import BoostingModel
 # from scorer import ROIChecker
+from configs.paths import TRAIN_DATA_PATH, TEST_DATA_PATH
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -15,9 +16,9 @@ def main():
     parser = argparse.ArgumentParser(description='main arguments parser')
     parser.add_argument('--mode',
                         type=str,
-                        default='fit',
+                        default='fit_predict',
                         required=True,
-                        help='choose mode: fit or predict (default: fit)'
+                        help='''Define mode, allowed values are : fit, fit_predict or predict (default: fit_predict)'''
                         )
 
     parser.add_argument('--model_path',
@@ -28,7 +29,7 @@ def main():
 
     parser.add_argument('--test_path',
                         type=str,
-                        default=None,
+                        default=TEST_DATA_PATH,
                         help='Define path to test data for predict mode (default: None)'
                         )
 
