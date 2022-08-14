@@ -1,6 +1,6 @@
 import pandas as pd
 from numpy import int64
-from configs.paths import TRAIN_DATA_PATH, TEST_DATA_PATH
+from configs.paths import TRAIN_DATA_PATH
 from data_transformer import MatchesToTeamsTransformer
 
 

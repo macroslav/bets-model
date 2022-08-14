@@ -1,11 +1,6 @@
-from catboost import CatBoostClassifier, CatBoostRegressor, Pool, cv
-from sklearn.linear_model import LogisticRegression, LinearRegression, SGDClassifier
-from sklearn.ensemble import RandomForestClassifier, StackingClassifier
-# import tensorflow as tf
+from catboost import CatBoostClassifier, Pool
 
-from typing import Protocol, Dict, List, Optional, Any
-
-from config import ModelConfig
+from typing import Protocol, Dict
 
 
 class BaseModel(Protocol):
@@ -89,52 +84,8 @@ class BoostingModel:
 
     def get_feature_importances(self, importance_type='catboost'):
 
-        """
-        Return feature importances depends on selected importance_type: catboost, permutation or shap
-
-        Parameters
-        ----------
-
-        importance_type : str, default = 'catboost'
-
-        Allowed values are :
-
-        - 'catboost', return catboost built-in values of feature importance (CatBoostModel.get_feature_importance())
-        - 'permutation', return permutation importance values with eli5
-        - 'shap', return feature importance based on Shapley's vectors
-
-        """
-
         if importance_type == 'catboost':
             return self.model.get_feature_importance()
 
         elif importance_type == 'permutation':
             return
-
-
-class RegressionNeuralNetwork:
-
-    def __init__(self, data):
-        self.train = data['train']
-        self.val = data['val']
-        self.test = data['test']
-        self.target = data['target']
-        self.cat_features = data['cat_features']
-
-        self.input_shape = self.train.shape
-
-        self.model = tf.keras.Sequential()
-
-    def fit(self):
-        self.model.fit()
-
-    def build_and_compile_model(self, norm):
-        self.model = tf.keras.Sequential([
-            norm,
-            tf.keras.layers.Dense(64, activation='relu'),
-            tf.keras.layers.Dense(64, activation='relu'),
-            tf.keras.layers.Dense(1)
-        ])
-
-        self.model.compile(loss='mean_absolute_error',
-                           optimizer=tf.keras.optimizers.Adam(0.001))

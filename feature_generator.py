@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from typing import List, Tuple, Dict, Any, Optional, NoReturn
+from typing import Dict, NoReturn
 
 
 class FeatureGenerator:
@@ -35,10 +35,6 @@ class FeatureGenerator:
         self.double_chance_features = grouped_features['coefficients']['double_chance_features']
         self.total_coef_features = grouped_features['coefficients']['total_coef_features']
         self.handicap_features = grouped_features['coefficients']['handicap_features']
-        self.half_features = grouped_features['coefficients']['half_features']
-        self.odd_features = grouped_features['coefficients']['odd_features']
-        self.correct_score_features = grouped_features['coefficients']['correct_score_features']
-        self.time_match_features = grouped_features['coefficients']['time_match_features']
         self.both_scored_features = grouped_features['coefficients']['both_scored_features']
 
         self.train_data = pd.DataFrame()
@@ -47,7 +43,7 @@ class FeatureGenerator:
 
     def run_generator(self):
 
-        self.cumulative()
+        # self.cumulative()
         self.log_features()
 
         return self.data
@@ -182,11 +178,13 @@ class FeatureGenerator:
                             current_lose_streak = self._calculate_lose_streak(current_lose_streak, away_match_score)
 
                             current_win_streak = self._calculate_win_streak(current_win_streak, away_match_score)
-
         data_with_current_points.current_home_points = data_with_current_points.current_home_points.astype(int)
+        data_with_current_points.current_away_points.fillna(0, inplace=True)
         data_with_current_points.current_away_points = data_with_current_points.current_away_points.astype(int)
+        data_with_current_points.current_away_win_streak.fillna(0, inplace=True)
         data_with_current_points.current_away_win_streak = data_with_current_points.current_away_win_streak.astype(
             int)
+        data_with_current_points.current_away_lose_streak.fillna(0, inplace=True)
         data_with_current_points.current_away_lose_streak = data_with_current_points.current_away_lose_streak.astype(
             int)
         data_with_current_points.current_home_win_streak = data_with_current_points.current_home_win_streak.astype(
@@ -227,4 +225,7 @@ class FeatureGenerator:
     def log_features(self) -> NoReturn:
 
         for feature in self.money_features:
-            self.data[f"log_{feature}"] = np.log(self.data[feature].values + 1)
+            try:
+                self.data[f"log_{feature}"] = np.log(self.data[feature].values + 1)
+            except KeyError:
+                pass
