@@ -408,37 +408,35 @@ class ROIChecker:
         self.dynamic_bet = self.current_dynamic_bank * self.percent_of_bank
 
     def count_average_static_info(self):
-        accepted_bets = 0
+        accepted_bets = []
         result_accepted_bets = 0
         total_accepted_bets = 0
         both_accepted_bets = 0
-        win_bets = 0
-        result_win_bets = 0
-        total_win_bets = 0
-        both_win_bets = 0
+        win_bets = []
+        result_win_bets = []
+        total_win_bets = []
+        both_win_bets = []
         lose_bets = 0
         average_coefs = []
         average_win_coefs = []
         result_average_win_coefs = []
         total_average_win_coefs = []
         both_average_win_coefs = []
-        batch = 0
         for result in self.full_static_info:
-            accepted_bets += result['accepted_bets']
+            accepted_bets.append(result['accepted_bets'])
             result_accepted_bets += result['result_accepted_bets']
             total_accepted_bets += result['total_accepted_bets']
             both_accepted_bets += result['both_accepted_bets']
-            win_bets += result['win_bets']
-            result_win_bets += result['result_win_bets']
-            total_win_bets += result['total_win_bets']
-            both_win_bets += result['both_win_bets']
+            win_bets.append(result['win_bets'])
+            result_win_bets.append(result['result_win_bets'])
+            total_win_bets.append(result['total_win_bets'])
+            both_win_bets.append(result['both_win_bets'])
             lose_bets += result['lose_bets']
             average_coefs.append(result['average_coef'])
             average_win_coefs.append(result['average_win_coef'])
             result_average_win_coefs.append(result['result_average_win_coef'])
             total_average_win_coefs.append(result['total_average_win_coef'])
             both_average_win_coefs.append(result['both_average_win_coef'])
-            batch += 1
         for k, v in self.full_static_info[-1]['countries'].items():
             try:
                 all_coef = self.countries_results[k]['win_bets'] * self.countries_results[k]['coef']
@@ -454,15 +452,35 @@ class ROIChecker:
                 self.countries_results[k]['roi'] = ((percent / 100) * coef - 1) * 100
             except KeyError:
                 self.countries_results[k] = v
-        average_coef = sum(average_coefs) / batch
-        average_win_coef = sum(average_win_coefs) / batch
-        result_average_win_coef = sum(result_average_win_coefs) / batch
-        total_average_win_coef = sum(total_average_win_coefs) / batch
-        both_average_win_coef = sum(both_average_win_coefs) / batch
-        win_rate = win_bets / accepted_bets if accepted_bets > 0 else 0
-        result_win_rate = result_win_bets / result_accepted_bets if result_accepted_bets > 0 else 0
-        total_win_rate = total_win_bets / total_accepted_bets if total_accepted_bets > 0 else 0
-        both_win_rate = both_win_bets / both_accepted_bets if both_accepted_bets > 0 else 0
+        sum_coefs = sum([a*b for a, b in zip(accepted_bets, average_coefs)])
+        try:
+            average_coef = sum_coefs / sum(accepted_bets)
+        except ZeroDivisionError:
+            average_coef = 0
+        sum_win_coefs = sum([a*b for a, b in zip(win_bets, average_win_coefs)])
+        try:
+            average_win_coef = sum_win_coefs / sum(win_bets)
+        except ZeroDivisionError:
+            average_win_coef = 0
+        sum_result_win_coefs = sum([a*b for a, b in zip(result_win_bets, result_average_win_coefs)])
+        try:
+            result_average_win_coef = sum_result_win_coefs / sum(result_win_bets)
+        except ZeroDivisionError:
+            result_average_win_coef = 0
+        sum_total_win_coefs = sum([a*b for a, b in zip(total_win_bets, total_average_win_coefs)])
+        try:
+            total_average_win_coef = sum_total_win_coefs / sum(total_win_bets)
+        except ZeroDivisionError:
+            total_average_win_coef = 0
+        sum_both_win_coefs = sum([a*b for a, b in zip(both_win_bets, both_average_win_coefs)])
+        try:
+            both_average_win_coef = sum_both_win_coefs / sum(both_win_bets)
+        except ZeroDivisionError:
+            both_average_win_coef = 0
+        win_rate = sum(win_bets) / sum(accepted_bets) if sum(accepted_bets) > 0 else 0
+        result_win_rate = sum(result_win_bets) / result_accepted_bets if result_accepted_bets > 0 else 0
+        total_win_rate = sum(total_win_bets) / total_accepted_bets if total_accepted_bets > 0 else 0
+        both_win_rate = sum(both_win_bets) / both_accepted_bets if both_accepted_bets > 0 else 0
         total_bank = self.full_static_info[-1]['total_bank']
         percent_profit = round((total_bank - self.start_bank) / self.start_bank * 100, 2)
         profit = total_bank - self.start_bank
