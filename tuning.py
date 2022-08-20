@@ -117,6 +117,8 @@ def get_score(predictions, target):
 
 
 def objective(trial):
+    #  При получении лучших параметров нужно прогонять на них pipeline.py
+    #  И фиксировать результаты в https://trello.com/c/uGpuNYUz
     params = {
         'depth': 1,
         'iterations': trial.suggest_int('iterations', 5000, 7000),
