@@ -78,7 +78,7 @@ class Predictor:
         }
 
         transformer = DataTransformer(transformer_context)
-        train = transformer.run_logic()
+        train, _ = transformer.run_logic()
         print('finish transformer')
 
         model_params = {
@@ -96,8 +96,8 @@ class Predictor:
         }
 
         model = CatBoostClassifier(**model_params)
-        y_train = train.target
-        X_train = train.drop(columns=['target'])
+        y_train = train.result_target
+        X_train = train.drop(columns=['result_target', 'total_target', 'both_target'])
         model.fit(X_train, y_train)
 
         future_transformer = DataTransformer(future_transformer_context)
