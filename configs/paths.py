@@ -1,3 +1,6 @@
-TRAIN_DATA_PATH = 'data/top_5_leagues.csv'
-FEATURES_PATH = 'data/features.yaml'
-TEST_DATA_PATH = 'data/first_may_france.csv'
+from pathlib import Path
+
+FEATURES_PATH = Path('data/features.yaml')
+MODELS_DIR = Path('models')
+RAW_DATA_PATH = Path('data/raw/full_top_5_leagues.csv')
+RAW_FUTURE_PATH = Path('data/first_may_france.csv')

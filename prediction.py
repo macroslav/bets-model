@@ -7,7 +7,7 @@ import pandas as pd
 import psycopg2
 from catboost import CatBoostClassifier
 
-from data_transformer import DataTransformer
+from src.data.data_transformers import DataTransformer
 
 
 class Predictor:

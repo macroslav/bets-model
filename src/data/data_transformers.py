@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 from typing import Dict, Tuple, NoReturn, Union, Any
 import logging
 
-from feature_generator import FeatureGenerator
+from src.features.feature_generator import FeatureGenerator
 
 TOTAL_THRESHOLD = 2.5
 

@@ -2,7 +2,7 @@ import pandas as pd
 from collections import Counter, OrderedDict
 
 
-class ROIChecker:
+class ROIScorer:
 
     def __init__(
         self,

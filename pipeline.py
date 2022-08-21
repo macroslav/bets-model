@@ -1,15 +1,14 @@
 import yaml
 
 import pandas as pd
-import numpy as np
 import seaborn as sns
 from catboost import CatBoostClassifier
 import matplotlib.pyplot as plt
 
-from data_transformer import DataTransformer
-from scorer import ROIChecker
+from src.data.data_transformers import DataTransformer
+from src.scorers.scorer import ROIScorer
 
-DATA_PATH = 'data/full_top_5_leagues.csv'
+DATA_PATH = 'data/raw/full_top_5_leagues.csv'
 FEATURES_PATH = 'data/features.yaml'
 
 raw_train_data = pd.read_csv(DATA_PATH)
@@ -79,7 +78,7 @@ def get_cv_data(train_data, train_initial_size=1600, window=500):
         yield train_cv, val_cv
 
 
-cv_scorer = ROIChecker(country_names=decode_labels['country_names'], leagues=decode_labels['leagues'])
+cv_scorer = ROIScorer(country_names=decode_labels['country_names'], leagues=decode_labels['leagues'])
 
 model_params = {
     'n_estimators': 1000,

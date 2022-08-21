@@ -3,7 +3,7 @@ import argparse
 
 # from datasets import DataLoader
 # from data_transformer import DataTransformer
-# from models import BoostingModel
+from src.models.models import ClassifierBoostingModel, BaseModel
 # from scorer import ROIChecker
 from configs.paths import TRAIN_DATA_PATH, TEST_DATA_PATH
 
@@ -52,4 +52,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
