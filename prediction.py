@@ -78,20 +78,26 @@ class Predictor:
         }
 
         transformer = DataTransformer(transformer_context)
-        train = transformer.run_logic()
+        train, _ = transformer.run_logic()
         print('finish transformer')
 
         model_params = {
-            'n_estimators': 1000,
-            'learning_rate': 0.03,
             'loss_function': 'MultiClass',
+            'depth': 1,
+            'iterations': 6884,
+            'colsample_bylevel': 0.09805089887364203,
+            'boosting_type': 'Ordered',
+            'bootstrap_type': 'Bayesian',
+            'learning_rate': 0.0895929273549625,
+            'l2_leaf_reg': 12,
+            'bagging_temperature': 4.087227192055693,
             'verbose': 250,
             'random_state': 322,
         }
 
         model = CatBoostClassifier(**model_params)
-        y_train = train.target
-        X_train = train.drop(columns=['target'])
+        y_train = train.result_target
+        X_train = train.drop(columns=['result_target', 'total_target', 'both_target'])
         model.fit(X_train, y_train)
 
         future_transformer = DataTransformer(future_transformer_context)
