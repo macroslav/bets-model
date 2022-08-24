@@ -244,6 +244,13 @@ class ROIChecker:
                 skipped_bets += 1
         for index, row in enumerate(total_predictions):
             if row['chance'] > self.roi_threshold:
+                country = row['country']
+                try:
+                    c[country]
+                except KeyError:
+                    c[country] = Counter()
+
+                c[country]['accepted_bets'] += 1
 
                 accepted_bets += 1
                 total_accepted_bets += 1
@@ -254,15 +261,19 @@ class ROIChecker:
 
                     current_profit = self.dynamic_bet * (accepted_coef - 1)
                     total_profit += current_profit
+                    c[country]['total_profit'] += current_profit
                     self.update_static_bank(self.current_static_bank + current_profit)
                     win_coef += accepted_coef
+                    c[country]['win_coef'] += accepted_coef
                     total_win_coef += accepted_coef
                     win_bank += current_profit
                     win_bets += 1
+                    c[country]['win_bets'] += 1
                     total_win_bets += 1
 
                 else:
                     total_profit -= self.dynamic_bet
+                    c[country]['total_profit'] -= self.dynamic_bet
                     self.update_static_bank(self.current_static_bank - self.dynamic_bet)
                     lose_coef += accepted_coef
                     lose_bank -= self.dynamic_bet
@@ -276,6 +287,13 @@ class ROIChecker:
 
         for index, row in enumerate(both_predictions):
             if row['chance'] > self.roi_threshold:
+                country = row['country']
+                try:
+                    c[country]
+                except KeyError:
+                    c[country] = Counter()
+
+                c[country]['accepted_bets'] += 1
 
                 accepted_bets += 1
                 both_accepted_bets += 1
@@ -286,15 +304,19 @@ class ROIChecker:
 
                     current_profit = self.dynamic_bet * (accepted_coef - 1)
                     total_profit += current_profit
+                    c[country]['total_profit'] += current_profit
                     self.update_static_bank(self.current_static_bank + current_profit)
                     win_coef += accepted_coef
+                    c[country]['win_coef'] += accepted_coef
                     both_win_coef += accepted_coef
                     win_bank += current_profit
                     win_bets += 1
+                    c[country]['win_bets'] += 1
                     both_win_bets += 1
 
                 else:
                     total_profit -= self.dynamic_bet
+                    c[country]['total_profit'] -= self.dynamic_bet
                     self.update_static_bank(self.current_static_bank - self.dynamic_bet)
                     lose_coef += accepted_coef
                     lose_bank -= self.dynamic_bet
@@ -488,6 +510,9 @@ class ROIChecker:
         print(
             {
                 'roi': round((average_win_coef * win_rate - 1) * 100, 2),
+                'win_rate': win_rate,
+                'average_win_coef': average_win_coef,
+                'accepted_bets': sum(accepted_bets),
                 'result_accepted_bets': result_accepted_bets,
                 'result_average_win_coef': result_average_win_coef,
                 'result_win_rate': result_win_rate,
@@ -497,14 +522,11 @@ class ROIChecker:
                 'both_accepted_bets': both_accepted_bets,
                 'both_average_win_coef': both_average_win_coef,
                 'both_win_rate': both_win_rate,
-                'accepted_bets': accepted_bets,
-                'win_bets': win_bets,
+                'win_bets': sum(win_bets),
                 'lose_bets': lose_bets,
-                'win_rate': win_rate,
                 'percent_profit': percent_profit,
                 'profit': profit,
                 'average_coef': average_coef,
-                'average_win_coef': average_win_coef,
                 'total_bank': total_bank,
             }
         )
