@@ -116,27 +116,27 @@ class ROIChecker:
             over_value = self.preds_proba_total[i][1] * row['total_over_25_rate']
             under_value = self.preds_proba_total[i][0] * row['total_under_25_rate']
             values = [under_value, over_value]
-            max_value = values.index(max(values))
-            if values[max_value] > 1.05:
-                if max_value == 0:
-                    bet = 0
-                    coef = row['total_under_25_rate']
-                    chance = self.preds_proba_total[i][0]
-                else:
-                    bet = 1
-                    coef = row['total_over_25_rate']
-                    chance = self.preds_proba_total[i][1]
-                result = {
-                    'league': row['league'],
-                    'country': row['country'],
-                    'season': row['season'],
-                    'bet': bet,
-                    'coef': coef,
-                    'chance': chance,
-                    'date': row['timestamp_date'],
-                    'index': i,
-                }
-                results.append(result)
+            for index, value in enumerate(values):
+                if value > 1:
+                    if value == 0:
+                        bet = 0
+                        coef = row['total_under_25_rate']
+                        chance = self.preds_proba_total[i][0]
+                    else:
+                        bet = 1
+                        coef = row['total_over_25_rate']
+                        chance = self.preds_proba_total[i][1]
+                    result = {
+                        'league': row['league'],
+                        'season': row['season'],
+                        'bet': bet,
+                        'coef': coef,
+                        'chance': chance,
+                        'date': row['timestamp_date'],
+                        'index': i,
+                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                    }
+                    results.append(result)
         return results
 
     def make_both_predictions(self):
@@ -145,27 +145,27 @@ class ROIChecker:
             yes_value = self.preds_proba_both[i][1] * row['both_team_to_score_yes']
             no_value = self.preds_proba_both[i][0] * row['both_team_to_score_no']
             values = [no_value, yes_value]
-            max_value = values.index(max(values))
-            if values[max_value] > 1:
-                if max_value == 0:
-                    bet = 0
-                    coef = row['both_team_to_score_no']
-                    chance = self.preds_proba_both[i][0]
-                else:
-                    bet = 1
-                    coef = row['both_team_to_score_yes']
-                    chance = self.preds_proba_both[i][1]
-                result = {
-                    'league': row['league'],
-                    'country': row['country'],
-                    'season': row['season'],
-                    'bet': bet,
-                    'coef': coef,
-                    'chance': chance,
-                    'date': row['timestamp_date'],
-                    'index': i,
-                }
-                results.append(result)
+            for index, value in enumerate(values):
+                if value > 1:
+                    if value == 0:
+                        bet = 0
+                        coef = row['both_team_to_score_no']
+                        chance = self.preds_proba_both[i][0]
+                    else:
+                        bet = 1
+                        coef = row['both_team_to_score_yes']
+                        chance = self.preds_proba_both[i][1]
+                    result = {
+                        'league': row['league'],
+                        'season': row['season'],
+                        'bet': bet,
+                        'coef': coef,
+                        'chance': chance,
+                        'date': row['timestamp_date'],
+                        'index': i,
+                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                    }
+                    results.append(result)
         return results
 
     def count_static_money(self, predictions: list[dict], total_predictions: list[dict], both_predictions: list[dict]):

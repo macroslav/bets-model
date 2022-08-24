@@ -9,12 +9,34 @@ from catboost import CatBoostClassifier
 
 from data_transformer import DataTransformer
 
+ENGLAND_DATA_PATH = 'data/england.csv'
+FRANCE_DATA_PATH = 'data/france.csv'
+GERMANY_DATA_PATH = 'data/germany.csv'
+ITALY_DATA_PATH = 'data/italy.csv'
+SPAIN_DATA_PATH = 'data/spain.csv'
+FEATURES_PATH = 'data/features.yaml'
+
 
 class Predictor:
 
-    def __init__(self, path_to_train_data: str, path_to_features: str, dataset):
+    def __init__(self, dataset):
 
-        self.raw_train_data = pd.read_csv(path_to_train_data)
+        raw_england_data = pd.read_csv(ENGLAND_DATA_PATH)
+        raw_france_data = pd.read_csv(FRANCE_DATA_PATH)
+        raw_germany_data = pd.read_csv(GERMANY_DATA_PATH)
+        raw_italy_data = pd.read_csv(ITALY_DATA_PATH)
+        raw_spain_data = pd.read_csv(SPAIN_DATA_PATH)
+
+        self.raw_train_data = pd.concat(
+            [
+                raw_england_data,
+                raw_france_data,
+                raw_germany_data,
+                raw_italy_data,
+                raw_spain_data,
+            ],
+            ignore_index=True,
+        )
         self.raw_train_data.reset_index(inplace=True, drop=True)
 
         self.raw_future_data = dataset
@@ -23,7 +45,7 @@ class Predictor:
         self.future_data = None
         self.links = None
 
-        with open(path_to_features) as f:
+        with open(FEATURES_PATH) as f:
             self.all_features_dict = yaml.safe_load(f)
 
     def run(self, user_data: dict):
