@@ -7,24 +7,35 @@ from catboost import CatBoostClassifier
 from data_transformer import DataTransformer
 
 
-DATA_PATH = 'data/full_top_5_leagues.csv'
+ENGLAND_DATA_PATH = 'data/raw/england.csv'
+FRANCE_DATA_PATH = 'data/raw/france.csv'
+GERMANY_DATA_PATH = 'data/raw/germany.csv'
+ITALY_DATA_PATH = 'data/raw/italy.csv'
+SPAIN_DATA_PATH = 'data/raw/spain.csv'
 FEATURES_PATH = 'data/features.yaml'
 
-raw_train_data = pd.read_csv(DATA_PATH)
+raw_england_data = pd.read_csv(ENGLAND_DATA_PATH)
+raw_france_data = pd.read_csv(FRANCE_DATA_PATH)
+raw_germany_data = pd.read_csv(GERMANY_DATA_PATH)
+raw_italy_data = pd.read_csv(ITALY_DATA_PATH)
+raw_spain_data = pd.read_csv(SPAIN_DATA_PATH)
+
+raw_train_data = pd.concat(
+    [
+        raw_england_data,
+        raw_france_data,
+        raw_germany_data,
+        raw_italy_data,
+        raw_spain_data,
+    ],
+    ignore_index=True,
+)
 
 raw_train_data = raw_train_data.sort_values(by='season')
 raw_train_data.reset_index(inplace=True, drop=True)
 
 with open(FEATURES_PATH) as f:
     all_features_dict = yaml.safe_load(f)
-
-for key, item in all_features_dict.items():
-    if isinstance(item, dict):
-        print(f"'{key}':")
-        for inner_key in item.keys():
-            print(f"\t'{inner_key}'")
-    else:
-        print(f"'{key}'")
 
 
 def base_data_preprocess(data):
@@ -140,7 +151,7 @@ def objective(trial):
     return get_score(predictions, y_test)
 
 
-study = optuna.create_study(direction="maximize")
+study = optuna.create_study(direction='maximize')
 study.optimize(objective, n_trials=1000)
 print(study.best_trial)
 print(study.best_trial.value)

@@ -6,43 +6,32 @@ from catboost import CatBoostClassifier
 import matplotlib.pyplot as plt
 
 from src.data.data_transformers import DataTransformer
+from src.data.data_loaders import DataLoader
 from src.scorers.scorer import ROIScorer
+from configs.paths import RAW_DATA_DIR, FEATURES_PATH
 
-DATA_PATH = 'data/raw/full_top_5_leagues.csv'
-FEATURES_PATH = 'data/features.yaml'
-
-raw_train_data = pd.read_csv(DATA_PATH)
-
-
-# raw_train_data = raw_train_data[raw_train_data['country'] == 'france']
-
-raw_train_data = raw_train_data.sort_values(by='season')
-raw_train_data.reset_index(inplace=True, drop=True)
-
-
-"""
-for i, row in raw_train_data.iterrows():
-    if row['season'] == '2021-2022':
-        print(i)
-"""
-
+loader = DataLoader(train_dir=RAW_DATA_DIR)
+raw_train_data, raw_future_data = loader()
+# raw_train_data = raw_train_data.sort_values(by='season')
+# raw_train_data.reset_index(inplace=True, drop=True)
 
 with open(FEATURES_PATH) as f:
     all_features_dict = yaml.safe_load(f)
 
-for key, item in all_features_dict.items():
-    if isinstance(item, dict):
-        print(f"'{key}':")
-        for inner_key in item.keys():
-            print(f"\t'{inner_key}'")
-    else:
-        print(f"'{key}'")
+
+# for key, item in all_features_dict.items():
+#     if isinstance(item, dict):
+#         print(f"'{key}':")
+#         for inner_key in item.keys():
+#             print(f"\t'{inner_key}'")
+#     else:
+#         print(f"'{key}'")
 
 
 def base_data_preprocess(data):
     preprocessed_data = data.copy()
-    preprocessed_data = preprocessed_data.sort_values(by='timestamp_date')
-    preprocessed_data = preprocessed_data.drop(columns=['date', 'link'])
+    # preprocessed_data = preprocessed_data.sort_values(by='timestamp_date')
+    # preprocessed_data = preprocessed_data.drop(columns=['date', 'link'])
     drop_index = preprocessed_data[preprocessed_data.home_goalkeepers_average_age.isna()].index
     preprocessed_data = preprocessed_data.drop(index=drop_index)
 
@@ -71,10 +60,23 @@ train = train.reset_index(drop=True)
 cat_features = list(categorical_features)
 
 
-def get_cv_data(train_data, train_initial_size=1600, window=500):
-    for index in range(0, train_data.shape[0] - train_initial_size - window + 1, window):
-        train_cv = train_data.loc[:train_initial_size + index]
-        val_cv = train_data.loc[train_initial_size + index: train_initial_size + index + window]
+def get_cv_data(data, start_from_season: str = '2017-2018',
+                unit: str = 'days',
+                days: int = 7,
+                weeks: int = 1):
+
+    start_time = data[data.season == start_from_season].timestamp_date.min()
+    finish_time = data.timestamp_date.max()
+
+    window = 0
+    if unit == 'days':
+        window = 24 * 3600 * days
+    elif unit == 'weeks':
+        window = 7 * 24 * 3600 * weeks
+
+    for period in range(start_time, finish_time, window):
+        train_cv = data.loc[data.timestamp_date < period]
+        val_cv = data.loc[(data.timestamp_date >= period) & (data.timestamp_date <= period + window)]
         yield train_cv, val_cv
 
 
@@ -135,3 +137,11 @@ for cv_train, cv_test in get_cv_data(train):
 dynamic_info, static_info = cv_scorer.return_info()
 sns.lineplot(x=[i for i in range(len(static_info[2]))], y=static_info[2])
 plt.savefig("low_features.png")
+
+
+def main():
+    pass
+
+
+if __name__ == "__main__":
+    main()

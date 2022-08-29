@@ -106,7 +106,12 @@ class DataTransformer:
         """ Encode all cat features with LabelEncoder """
         label_encoder = LabelEncoder()
         for col in self.cat_features:
-            if col not in ['country', 'home_manager_country', 'away_manager_country', 'league']:
+            if col not in [
+                'country',
+                'home_manager_country',
+                'away_manager_country',
+                'league',
+            ]:
                 try:
                     self.transformed_data.loc[:, col] = label_encoder.fit_transform(self.transformed_data.loc[:, col])
                 except Exception:
@@ -120,7 +125,7 @@ class DataTransformer:
     def _names_encoding(self) -> NoReturn:
 
         names = _remove_by_key(self.grouped_features['names'], 'country_names')
-
+        names = _remove_by_key(names, 'team_names')
         for col_name, (first_col, second_col) in names.items():
             all_values = list(self.transformed_data.sort_values(by=first_col)[first_col].unique())
             all_values += list(self.transformed_data.sort_values(by=second_col)[second_col].unique())
@@ -135,6 +140,21 @@ class DataTransformer:
             # self.test_data['home_team'] = self.test_data['home_team'].map(self.encode_labels)
             # self.test_data['away_team'] = self.test_data['away_team'].map(self.encode_labels)
 
+        all_teams = list(self.transformed_data.sort_values(by='home_team')['home_team'].unique())
+        all_teams += list(self.transformed_data.sort_values(by='away_team')['away_team'].unique())
+        all_players = []
+        for index in range(1, 12):
+            for home_or_away in {'home', 'away'}:
+                all_teams += list(
+                    self.transformed_data.sort_values(by=f'{home_or_away}_top{index}_signed_from')[f'{home_or_away}_top{index}_signed_from'].unique(),
+                )
+                all_players += list(
+                    self.transformed_data.sort_values(by=f'{home_or_away}_top{index}_name')[
+                        f'{home_or_away}_top{index}_name'].unique(),
+                )
+        unique_teams = set(all_teams)
+        unique_players = set(all_players)
+
         country, home_manager, away_manager = self.country_names
         all_countries = list(self.transformed_data.sort_values(by=country)[country].unique())
         all_countries += list(self.transformed_data.sort_values(by=home_manager)[home_manager].unique())
@@ -143,6 +163,10 @@ class DataTransformer:
 
         leagues = list(self.transformed_data.sort_values(by='league')['league'].unique())
 
+        self.encode_labels['team_names'] = {value: number for number, value in enumerate(unique_teams)}
+        self.decode_labels['team_names'] = {number: value for number, value in enumerate(unique_teams)}
+        self.encode_labels['player_names'] = {value: number for number, value in enumerate(unique_players)}
+        self.decode_labels['player_names'] = {number: value for number, value in enumerate(unique_players)}
         self.encode_labels['country_names'] = {value: number for number, value in enumerate(unique_countries)}
         self.decode_labels['country_names'] = {number: value for number, value in enumerate(unique_countries)}
         self.encode_labels['leagues'] = {value: number for number, value in enumerate(leagues)}
@@ -153,6 +177,18 @@ class DataTransformer:
             self.encode_labels['country_names'])
         self.transformed_data[away_manager] = self.transformed_data[away_manager].map(
             self.encode_labels['country_names'])
+        self.transformed_data['home_team'] = self.transformed_data['home_team'].map(
+            self.encode_labels['team_names'])
+        self.transformed_data['away_team'] = self.transformed_data['away_team'].map(
+            self.encode_labels['team_names'])
+        for index in range(1, 12):
+            for home_or_away in {'home', 'away'}:
+                self.transformed_data[f'{home_or_away}_top{index}_nationality'] = self.transformed_data[f'{home_or_away}_top{index}_nationality'].map(
+                    self.encode_labels['country_names'])
+                self.transformed_data[f'{home_or_away}_top{index}_signed_from'] = self.transformed_data[f'{home_or_away}_top{index}_signed_from'].map(
+                    self.encode_labels['team_names'])
+                self.transformed_data[f'{home_or_away}_top{index}_name'] = self.transformed_data[f'{home_or_away}_top{index}_name'].map(
+                    self.encode_labels['player_names'])
         self.transformed_data['league'] = self.transformed_data['league'].map(self.encode_labels['leagues'])
 
     def _generate_features(self) -> NoReturn:
