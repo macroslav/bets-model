@@ -1,7 +1,6 @@
 import yaml
 
 import pandas as pd
-import numpy as np
 import seaborn as sns
 from catboost import CatBoostClassifier
 import matplotlib.pyplot as plt
@@ -9,24 +8,32 @@ import matplotlib.pyplot as plt
 from data_transformer import DataTransformer
 from scorer import ROIChecker
 
-DATA_PATH = 'data/full_top_5_leagues.csv'
+ENGLAND_DATA_PATH = 'data/england.csv'
+FRANCE_DATA_PATH = 'data/france.csv'
+GERMANY_DATA_PATH = 'data/germany.csv'
+ITALY_DATA_PATH = 'data/italy.csv'
+SPAIN_DATA_PATH = 'data/spain.csv'
 FEATURES_PATH = 'data/features.yaml'
 
-raw_train_data = pd.read_csv(DATA_PATH)
+raw_england_data = pd.read_csv(ENGLAND_DATA_PATH)
+raw_france_data = pd.read_csv(FRANCE_DATA_PATH)
+raw_germany_data = pd.read_csv(GERMANY_DATA_PATH)
+raw_italy_data = pd.read_csv(ITALY_DATA_PATH)
+raw_spain_data = pd.read_csv(SPAIN_DATA_PATH)
 
-
-# raw_train_data = raw_train_data[raw_train_data['country'] == 'france']
+raw_train_data = pd.concat(
+    [
+        raw_england_data,
+        raw_france_data,
+        raw_germany_data,
+        raw_italy_data,
+        raw_spain_data,
+    ],
+    ignore_index=True,
+)
 
 raw_train_data = raw_train_data.sort_values(by='season')
 raw_train_data.reset_index(inplace=True, drop=True)
-
-
-"""
-for i, row in raw_train_data.iterrows():
-    if row['season'] == '2021-2022':
-        print(i)
-"""
-
 
 with open(FEATURES_PATH) as f:
     all_features_dict = yaml.safe_load(f)

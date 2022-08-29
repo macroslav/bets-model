@@ -116,27 +116,27 @@ class ROIChecker:
             over_value = self.preds_proba_total[i][1] * row['total_over_25_rate']
             under_value = self.preds_proba_total[i][0] * row['total_under_25_rate']
             values = [under_value, over_value]
-            max_value = values.index(max(values))
-            if values[max_value] > 1.05:
-                if max_value == 0:
-                    bet = 0
-                    coef = row['total_under_25_rate']
-                    chance = self.preds_proba_total[i][0]
-                else:
-                    bet = 1
-                    coef = row['total_over_25_rate']
-                    chance = self.preds_proba_total[i][1]
-                result = {
-                    'league': row['league'],
-                    'country': row['country'],
-                    'season': row['season'],
-                    'bet': bet,
-                    'coef': coef,
-                    'chance': chance,
-                    'date': row['timestamp_date'],
-                    'index': i,
-                }
-                results.append(result)
+            for index, value in enumerate(values):
+                if value > 1:
+                    if value == 0:
+                        bet = 0
+                        coef = row['total_under_25_rate']
+                        chance = self.preds_proba_total[i][0]
+                    else:
+                        bet = 1
+                        coef = row['total_over_25_rate']
+                        chance = self.preds_proba_total[i][1]
+                    result = {
+                        'league': row['league'],
+                        'season': row['season'],
+                        'bet': bet,
+                        'coef': coef,
+                        'chance': chance,
+                        'date': row['timestamp_date'],
+                        'index': i,
+                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                    }
+                    results.append(result)
         return results
 
     def make_both_predictions(self):
@@ -145,27 +145,27 @@ class ROIChecker:
             yes_value = self.preds_proba_both[i][1] * row['both_team_to_score_yes']
             no_value = self.preds_proba_both[i][0] * row['both_team_to_score_no']
             values = [no_value, yes_value]
-            max_value = values.index(max(values))
-            if values[max_value] > 1:
-                if max_value == 0:
-                    bet = 0
-                    coef = row['both_team_to_score_no']
-                    chance = self.preds_proba_both[i][0]
-                else:
-                    bet = 1
-                    coef = row['both_team_to_score_yes']
-                    chance = self.preds_proba_both[i][1]
-                result = {
-                    'league': row['league'],
-                    'country': row['country'],
-                    'season': row['season'],
-                    'bet': bet,
-                    'coef': coef,
-                    'chance': chance,
-                    'date': row['timestamp_date'],
-                    'index': i,
-                }
-                results.append(result)
+            for index, value in enumerate(values):
+                if value > 1:
+                    if value == 0:
+                        bet = 0
+                        coef = row['both_team_to_score_no']
+                        chance = self.preds_proba_both[i][0]
+                    else:
+                        bet = 1
+                        coef = row['both_team_to_score_yes']
+                        chance = self.preds_proba_both[i][1]
+                    result = {
+                        'league': row['league'],
+                        'season': row['season'],
+                        'bet': bet,
+                        'coef': coef,
+                        'chance': chance,
+                        'date': row['timestamp_date'],
+                        'index': i,
+                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                    }
+                    results.append(result)
         return results
 
     def count_static_money(self, predictions: list[dict], total_predictions: list[dict], both_predictions: list[dict]):
@@ -244,6 +244,13 @@ class ROIChecker:
                 skipped_bets += 1
         for index, row in enumerate(total_predictions):
             if row['chance'] > self.roi_threshold:
+                country = row['country']
+                try:
+                    c[country]
+                except KeyError:
+                    c[country] = Counter()
+
+                c[country]['accepted_bets'] += 1
 
                 accepted_bets += 1
                 total_accepted_bets += 1
@@ -254,15 +261,19 @@ class ROIChecker:
 
                     current_profit = self.dynamic_bet * (accepted_coef - 1)
                     total_profit += current_profit
+                    c[country]['total_profit'] += current_profit
                     self.update_static_bank(self.current_static_bank + current_profit)
                     win_coef += accepted_coef
+                    c[country]['win_coef'] += accepted_coef
                     total_win_coef += accepted_coef
                     win_bank += current_profit
                     win_bets += 1
+                    c[country]['win_bets'] += 1
                     total_win_bets += 1
 
                 else:
                     total_profit -= self.dynamic_bet
+                    c[country]['total_profit'] -= self.dynamic_bet
                     self.update_static_bank(self.current_static_bank - self.dynamic_bet)
                     lose_coef += accepted_coef
                     lose_bank -= self.dynamic_bet
@@ -276,6 +287,13 @@ class ROIChecker:
 
         for index, row in enumerate(both_predictions):
             if row['chance'] > self.roi_threshold:
+                country = row['country']
+                try:
+                    c[country]
+                except KeyError:
+                    c[country] = Counter()
+
+                c[country]['accepted_bets'] += 1
 
                 accepted_bets += 1
                 both_accepted_bets += 1
@@ -286,15 +304,19 @@ class ROIChecker:
 
                     current_profit = self.dynamic_bet * (accepted_coef - 1)
                     total_profit += current_profit
+                    c[country]['total_profit'] += current_profit
                     self.update_static_bank(self.current_static_bank + current_profit)
                     win_coef += accepted_coef
+                    c[country]['win_coef'] += accepted_coef
                     both_win_coef += accepted_coef
                     win_bank += current_profit
                     win_bets += 1
+                    c[country]['win_bets'] += 1
                     both_win_bets += 1
 
                 else:
                     total_profit -= self.dynamic_bet
+                    c[country]['total_profit'] -= self.dynamic_bet
                     self.update_static_bank(self.current_static_bank - self.dynamic_bet)
                     lose_coef += accepted_coef
                     lose_bank -= self.dynamic_bet
@@ -488,6 +510,9 @@ class ROIChecker:
         print(
             {
                 'roi': round((average_win_coef * win_rate - 1) * 100, 2),
+                'win_rate': win_rate,
+                'average_win_coef': average_win_coef,
+                'accepted_bets': sum(accepted_bets),
                 'result_accepted_bets': result_accepted_bets,
                 'result_average_win_coef': result_average_win_coef,
                 'result_win_rate': result_win_rate,
@@ -497,14 +522,11 @@ class ROIChecker:
                 'both_accepted_bets': both_accepted_bets,
                 'both_average_win_coef': both_average_win_coef,
                 'both_win_rate': both_win_rate,
-                'accepted_bets': accepted_bets,
-                'win_bets': win_bets,
+                'win_bets': sum(win_bets),
                 'lose_bets': lose_bets,
-                'win_rate': win_rate,
                 'percent_profit': percent_profit,
                 'profit': profit,
                 'average_coef': average_coef,
-                'average_win_coef': average_win_coef,
                 'total_bank': total_bank,
             }
         )
