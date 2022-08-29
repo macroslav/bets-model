@@ -1,0 +1,5 @@
+data/england.csv filter=lfs diff=lfs merge=lfs -text
+data/spain.csv filter=lfs diff=lfs merge=lfs -text
+data/italy.csv filter=lfs diff=lfs merge=lfs -text
+data/germany.csv filter=lfs diff=lfs merge=lfs -text
+data/france.csv filter=lfs diff=lfs merge=lfs -text
