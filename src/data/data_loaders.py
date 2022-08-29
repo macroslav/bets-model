@@ -36,7 +36,7 @@ class DataLoader:
     def load_data(self):
         self.train_data = self._load_matches(self.train_path)
         if isinstance(self.future_path, Path):
-            self.future_data = self._load_matches(self.future_data)
+            self.future_data = self._load_matches(self.future_path)
 
     @staticmethod
     def _load_matches(path):
@@ -58,9 +58,9 @@ class DataLoader:
         preprocessed_data['week'] = preprocessed_data.date.dt.isocalendar().week
         preprocessed_data['year'] = preprocessed_data.date.dt.year
         preprocessed_data['timestamp'] = preprocessed_data.date.values.astype(int64) // 10 ** 9
-
-        preprocessed_data['home_manager_age'] /= 365
-        preprocessed_data['away_manager_age'] /= 365
+        #
+        # preprocessed_data['home_manager_age'] /= 365
+        # preprocessed_data['away_manager_age'] /= 365
 
         preprocessed_data = preprocessed_data.sort_values(by='date')
         preprocessed_data = preprocessed_data.drop(columns=['link'])
