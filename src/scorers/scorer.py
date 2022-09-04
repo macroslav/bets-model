@@ -6,8 +6,8 @@ class ROIScorer:
 
     def __init__(
         self,
-        country_names,
-        leagues,
+        # country_names,
+        # leagues,
         start_bank: int = 5000,
         static_bet: int = 50,
         percent_of_bank: float = 0.01,
@@ -37,8 +37,8 @@ class ROIScorer:
         self.preds_proba_total = None
         self.preds_proba_both = None
 
-        self.country_names = country_names
-        self.leagues = leagues
+        # self.country_names = country_names
+        # self.leagues = leagues
         self.countries_results = {}
 
     def run_check(
@@ -105,7 +105,7 @@ class ROIScorer:
                         'chance': chance,
                         'date': row['timestamp_date'],
                         'index': i,
-                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                        'country': f"{row['country']} {row['league']}"
                     }
                     results.append(result)
         return results
@@ -134,7 +134,7 @@ class ROIScorer:
                         'chance': chance,
                         'date': row['timestamp_date'],
                         'index': i,
-                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                        'country': f"{row['country']} {row['league']}"
                     }
                     results.append(result)
         return results
@@ -163,7 +163,7 @@ class ROIScorer:
                         'chance': chance,
                         'date': row['timestamp_date'],
                         'index': i,
-                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                        'country': f"{row['country']} {row['league']}"
                     }
                     results.append(result)
         return results

@@ -1,4 +1,5 @@
 import yaml
+import logging
 
 import pandas as pd
 import seaborn as sns
@@ -7,9 +8,13 @@ import matplotlib.pyplot as plt
 
 from src.data.data_transformers import DataTransformer
 from src.data.data_loaders import DataLoader
+from src.data.data_splits import get_cv_data
 from src.scorers.scorer import ROIScorer
 from configs.paths import RAW_DATA_DIR, FEATURES_PATH
 
+logging.basicConfig(level=logging.DEBUG)
+
+logging.debug("Loading data...")
 loader = DataLoader(train_dir=RAW_DATA_DIR)
 raw_train_data, raw_future_data = loader()
 # raw_train_data = raw_train_data.sort_values(by='season')
@@ -17,6 +22,7 @@ raw_train_data, raw_future_data = loader()
 
 with open(FEATURES_PATH) as f:
     all_features_dict = yaml.safe_load(f)
+logging.debug('Data successfully loaded')
 
 
 # for key, item in all_features_dict.items():
@@ -38,7 +44,10 @@ def base_data_preprocess(data):
     return preprocessed_data
 
 
+logging.debug("Preprocess train data")
 train_data = base_data_preprocess(raw_train_data)
+use_features = all_features_dict['use_features']
+train_data = train_data[use_features]
 
 numeric_features = tuple(train_data.select_dtypes(include=['int', 'float']).columns)
 
@@ -49,38 +58,21 @@ features = {'cat_features': categorical_features,
             'grouped_features': all_features_dict
             }
 
+targets = ['home_scored', 'away_scored']
+
 transformer_context = {'data': train_data,
-                       'features': features
+                       'targets': targets
                        }
 
+logging.debug("Data transformation")
 transformer = DataTransformer(transformer_context)
-train, decode_labels = transformer.run_logic()
+train = transformer.run_logic()
 train = train.reset_index(drop=True)
+
+cv_scorer = ROIScorer()
 
 cat_features = list(categorical_features)
 
-
-def get_cv_data(data, start_from_season: str = '2017-2018',
-                unit: str = 'days',
-                days: int = 7,
-                weeks: int = 1):
-
-    start_time = data[data.season == start_from_season].timestamp_date.min()
-    finish_time = data.timestamp_date.max()
-
-    window = 0
-    if unit == 'days':
-        window = 24 * 3600 * days
-    elif unit == 'weeks':
-        window = 7 * 24 * 3600 * weeks
-
-    for period in range(start_time, finish_time, window):
-        train_cv = data.loc[data.timestamp_date < period]
-        val_cv = data.loc[(data.timestamp_date >= period) & (data.timestamp_date <= period + window)]
-        yield train_cv, val_cv
-
-
-cv_scorer = ROIScorer(country_names=decode_labels['country_names'], leagues=decode_labels['leagues'])
 
 model_params = {
     'n_estimators': 1000,
@@ -102,14 +94,18 @@ cv_model_result = CatBoostClassifier(**{
 # cv_model_total = CatBoostClassifier(**model_params)
 # cv_model_both = CatBoostClassifier(**model_params)
 
+
+START_DATE = '2022-01-01'
+logging.debug(f"Run simulation from {START_DATE}")
+
 iteration = 0
-for cv_train, cv_test in get_cv_data(train):
-    cv_y_train_result = cv_train.result_target
+for cv_train, cv_test in get_cv_data(train, unit='weeks', start_date=START_DATE):
+    cv_y_train_result = cv_train[['result_target']]
     cv_y_train_total = cv_train.total_target
     cv_y_train_both = cv_train.both_target
     cv_X_train = cv_train.drop(columns=['result_target', 'total_target', 'both_target'])
 
-    cv_model_result.fit(cv_X_train, cv_y_train_result)
+    cv_model_result.fit(cv_X_train, cv_y_train_result, cat_features=categorical_features)
     # cv_model_total.fit(cv_X_train, cv_y_train_total)
     # cv_model_both.fit(cv_X_train, cv_y_train_both)
 
@@ -137,11 +133,3 @@ for cv_train, cv_test in get_cv_data(train):
 dynamic_info, static_info = cv_scorer.return_info()
 sns.lineplot(x=[i for i in range(len(static_info[2]))], y=static_info[2])
 plt.savefig("low_features.png")
-
-
-def main():
-    pass
-
-
-if __name__ == "__main__":
-    main()
