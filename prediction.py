@@ -7,13 +7,13 @@ import pandas as pd
 import psycopg2
 from catboost import CatBoostClassifier
 
-from data_transformer import DataTransformer
+from src.data.data_transformers import DataTransformer
 
-ENGLAND_DATA_PATH = 'data/england.csv'
-FRANCE_DATA_PATH = 'data/france.csv'
-GERMANY_DATA_PATH = 'data/germany.csv'
-ITALY_DATA_PATH = 'data/italy.csv'
-SPAIN_DATA_PATH = 'data/spain.csv'
+ENGLAND_DATA_PATH = 'data/raw/england.csv'
+FRANCE_DATA_PATH = 'data/raw/france.csv'
+GERMANY_DATA_PATH = 'data/raw/germany.csv'
+ITALY_DATA_PATH = 'data/raw/italy.csv'
+SPAIN_DATA_PATH = 'data/raw/spain.csv'
 FEATURES_PATH = 'data/features.yaml'
 
 

@@ -1,63 +1,53 @@
 import yaml
+import logging
 
 import pandas as pd
 import seaborn as sns
 from catboost import CatBoostClassifier
 import matplotlib.pyplot as plt
 
-from data_transformer import DataTransformer
-from scorer import ROIChecker
+from src.data.data_transformers import DataTransformer
+from src.data.data_loaders import DataLoader
+from src.data.data_splits import get_cv_data
+from src.scorers.scorer import ROIScorer
+from configs.paths import RAW_DATA_DIR, FEATURES_PATH
 
-ENGLAND_DATA_PATH = 'data/england.csv'
-FRANCE_DATA_PATH = 'data/france.csv'
-GERMANY_DATA_PATH = 'data/germany.csv'
-ITALY_DATA_PATH = 'data/italy.csv'
-SPAIN_DATA_PATH = 'data/spain.csv'
-FEATURES_PATH = 'data/features.yaml'
+logging.basicConfig(level=logging.DEBUG)
 
-raw_england_data = pd.read_csv(ENGLAND_DATA_PATH)
-raw_france_data = pd.read_csv(FRANCE_DATA_PATH)
-raw_germany_data = pd.read_csv(GERMANY_DATA_PATH)
-raw_italy_data = pd.read_csv(ITALY_DATA_PATH)
-raw_spain_data = pd.read_csv(SPAIN_DATA_PATH)
-
-raw_train_data = pd.concat(
-    [
-        raw_england_data,
-        raw_france_data,
-        raw_germany_data,
-        raw_italy_data,
-        raw_spain_data,
-    ],
-    ignore_index=True,
-)
-
-raw_train_data = raw_train_data.sort_values(by='season')
-raw_train_data.reset_index(inplace=True, drop=True)
+logging.debug("Loading data...")
+loader = DataLoader(train_dir=RAW_DATA_DIR)
+raw_train_data, raw_future_data = loader()
+# raw_train_data = raw_train_data.sort_values(by='season')
+# raw_train_data.reset_index(inplace=True, drop=True)
 
 with open(FEATURES_PATH) as f:
     all_features_dict = yaml.safe_load(f)
+logging.debug('Data successfully loaded')
 
-for key, item in all_features_dict.items():
-    if isinstance(item, dict):
-        print(f"'{key}':")
-        for inner_key in item.keys():
-            print(f"\t'{inner_key}'")
-    else:
-        print(f"'{key}'")
+
+# for key, item in all_features_dict.items():
+#     if isinstance(item, dict):
+#         print(f"'{key}':")
+#         for inner_key in item.keys():
+#             print(f"\t'{inner_key}'")
+#     else:
+#         print(f"'{key}'")
 
 
 def base_data_preprocess(data):
     preprocessed_data = data.copy()
-    preprocessed_data = preprocessed_data.sort_values(by='timestamp_date')
-    preprocessed_data = preprocessed_data.drop(columns=['date', 'link'])
+    # preprocessed_data = preprocessed_data.sort_values(by='timestamp_date')
+    # preprocessed_data = preprocessed_data.drop(columns=['date', 'link'])
     drop_index = preprocessed_data[preprocessed_data.home_goalkeepers_average_age.isna()].index
     preprocessed_data = preprocessed_data.drop(index=drop_index)
 
     return preprocessed_data
 
 
+logging.debug("Preprocess train data")
 train_data = base_data_preprocess(raw_train_data)
+use_features = all_features_dict['use_features']
+train_data = train_data[use_features]
 
 numeric_features = tuple(train_data.select_dtypes(include=['int', 'float']).columns)
 
@@ -68,25 +58,21 @@ features = {'cat_features': categorical_features,
             'grouped_features': all_features_dict
             }
 
+targets = ['home_scored', 'away_scored']
+
 transformer_context = {'data': train_data,
-                       'features': features
+                       'targets': targets
                        }
 
+logging.debug("Data transformation")
 transformer = DataTransformer(transformer_context)
-train, decode_labels = transformer.run_logic()
+train = transformer.run_logic()
 train = train.reset_index(drop=True)
+
+cv_scorer = ROIScorer()
 
 cat_features = list(categorical_features)
 
-
-def get_cv_data(train_data, train_initial_size=1600, window=500):
-    for index in range(0, train_data.shape[0] - train_initial_size - window + 1, window):
-        train_cv = train_data.loc[:train_initial_size + index]
-        val_cv = train_data.loc[train_initial_size + index: train_initial_size + index + window]
-        yield train_cv, val_cv
-
-
-cv_scorer = ROIChecker(country_names=decode_labels['country_names'], leagues=decode_labels['leagues'])
 
 model_params = {
     'n_estimators': 1000,
@@ -108,14 +94,18 @@ cv_model_result = CatBoostClassifier(**{
 # cv_model_total = CatBoostClassifier(**model_params)
 # cv_model_both = CatBoostClassifier(**model_params)
 
+
+START_DATE = '2022-01-01'
+logging.debug(f"Run simulation from {START_DATE}")
+
 iteration = 0
-for cv_train, cv_test in get_cv_data(train):
-    cv_y_train_result = cv_train.result_target
+for cv_train, cv_test in get_cv_data(train, unit='weeks', start_date=START_DATE):
+    cv_y_train_result = cv_train[['result_target']]
     cv_y_train_total = cv_train.total_target
     cv_y_train_both = cv_train.both_target
     cv_X_train = cv_train.drop(columns=['result_target', 'total_target', 'both_target'])
 
-    cv_model_result.fit(cv_X_train, cv_y_train_result)
+    cv_model_result.fit(cv_X_train, cv_y_train_result, cat_features=categorical_features)
     # cv_model_total.fit(cv_X_train, cv_y_train_total)
     # cv_model_both.fit(cv_X_train, cv_y_train_both)
 

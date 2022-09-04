@@ -1,10 +1,7 @@
-import optuna
 import pandas as pd
 from catboost import CatBoostClassifier, Pool
 
 from typing import List
-
-from scorer import ROIChecker
 
 
 class Optimizer:

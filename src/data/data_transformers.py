@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 from typing import Dict, Tuple, NoReturn, Union, Any
 import logging
 
-from feature_generator import FeatureGenerator
+from src.features.feature_generator import FeatureGenerator
 
 TOTAL_THRESHOLD = 2.5
 
@@ -45,62 +45,64 @@ class DataTransformer:
 
     def __init__(self, context: Dict):
         self.train_data = context['data']
-        self.features = context['features']
+        self.targets = context['targets']
+        # self.features = context['features']
 
         self.transformed_data = self.train_data.copy()
-        self.val_data = None
 
-        self.cat_features = self.features['cat_features']
+        # self.cat_features = self.features['cat_features']
+        #
+        # self.grouped_features = self.features['grouped_features']
+        #
+        # self.team_names = self.grouped_features['names']['team_names']
+        # self.country_names = self.grouped_features['names']['country_names']
+        # self.city_names = self.grouped_features['names']['city_names']
+        # self.manager_names = self.grouped_features['names']['manager_names']
 
-        self.grouped_features = self.features['grouped_features']
+        # self.encode_labels = dict()
+        # self.decode_labels = dict()
 
-        self.team_names = self.grouped_features['names']['team_names']
-        self.country_names = self.grouped_features['names']['country_names']
-        self.city_names = self.grouped_features['names']['city_names']
-        self.manager_names = self.grouped_features['names']['manager_names']
+    def run_logic(self, kind: str = 'train') -> pd.DataFrame:
+        """ Run processing data
 
-        self.encode_labels = dict()
-        self.decode_labels = dict()
 
-    def run_logic(self):
-
+        """
         self._fill_nans()
+        self._transform_target()
 
-        self.transformed_data['result_target'] = self.transformed_data.apply(_set_target, axis=1)
-        self.transformed_data['total_target'] = self.transformed_data.apply(_set_total_target, axis=1)
-        self.transformed_data['both_target'] = self.transformed_data.apply(_set_both_target, axis=1)
-
-        self._names_encoding()
-        self._categorical_encoding()
-        logging.debug('All categorical features are already encoded!')
-        self._generate_features()
-        logging.debug('New features are generated!')
+        # self._names_encoding()
+        # self._categorical_encoding()
+        # self._generate_features()
         self._drop()
 
         self._split()
 
-        return self.transformed_data, self.decode_labels
+        return self.transformed_data #, self.decode_labels
 
     def run_future_logic(self):
 
         self._fill_nans()
 
-        self._names_encoding()
-        self._categorical_encoding()
-        print('All categorical features are already encoded!')
-        self._generate_features()
-        print('Features are already generated!')
+        # self._names_encoding()
+        # self._categorical_encoding()
+        # self._generate_features()
 
         self._split()
 
         return self.train_data
+
+    def _transform_target(self):
+
+        self.transformed_data['result_target'] = self.transformed_data.apply(_set_target, axis=1)
+        self.transformed_data['total_target'] = self.transformed_data.apply(_set_total_target, axis=1)
+        self.transformed_data['both_target'] = self.transformed_data.apply(_set_both_target, axis=1)
 
     def _fill_nans(self) -> NoReturn:
 
         self.transformed_data = self.transformed_data.fillna(0)
 
     def _drop(self):
-        self.transformed_data = self.transformed_data.drop(columns=self.grouped_features['scored_features'])
+        self.transformed_data = self.transformed_data.drop(columns=self.targets)
 
     def _categorical_encoding(self) -> NoReturn:
         """ Encode all cat features with LabelEncoder """
