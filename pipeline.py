@@ -8,18 +8,18 @@ import matplotlib.pyplot as plt
 from data_transformer import DataTransformer
 from scorer import ROIChecker
 
-ENGLAND_DATA_PATH = 'data/england.csv'
-FRANCE_DATA_PATH = 'data/france.csv'
-GERMANY_DATA_PATH = 'data/germany.csv'
-ITALY_DATA_PATH = 'data/italy.csv'
-SPAIN_DATA_PATH = 'data/spain.csv'
+ENGLAND_DATA_PATH = 'data/england.csv.gz'
+FRANCE_DATA_PATH = 'data/france.csv.gz'
+GERMANY_DATA_PATH = 'data/germany.csv.gz'
+ITALY_DATA_PATH = 'data/italy.csv.gz'
+SPAIN_DATA_PATH = 'data/spain.csv.gz'
 FEATURES_PATH = 'data/features.yaml'
 
-raw_england_data = pd.read_csv(ENGLAND_DATA_PATH)
-raw_france_data = pd.read_csv(FRANCE_DATA_PATH)
-raw_germany_data = pd.read_csv(GERMANY_DATA_PATH)
-raw_italy_data = pd.read_csv(ITALY_DATA_PATH)
-raw_spain_data = pd.read_csv(SPAIN_DATA_PATH)
+raw_england_data = pd.read_csv(ENGLAND_DATA_PATH, compression='gzip')
+raw_france_data = pd.read_csv(FRANCE_DATA_PATH, compression='gzip')
+raw_germany_data = pd.read_csv(GERMANY_DATA_PATH, compression='gzip')
+raw_italy_data = pd.read_csv(ITALY_DATA_PATH, compression='gzip')
+raw_spain_data = pd.read_csv(SPAIN_DATA_PATH, compression='gzip')
 
 raw_train_data = pd.concat(
     [
@@ -73,7 +73,7 @@ transformer_context = {'data': train_data,
                        }
 
 transformer = DataTransformer(transformer_context)
-train, decode_labels = transformer.run_logic()
+train = transformer.run_logic()
 train = train.reset_index(drop=True)
 
 cat_features = list(categorical_features)
@@ -86,7 +86,7 @@ def get_cv_data(train_data, train_initial_size=1600, window=500):
         yield train_cv, val_cv
 
 
-cv_scorer = ROIChecker(country_names=decode_labels['country_names'], leagues=decode_labels['leagues'])
+cv_scorer = ROIChecker()
 
 model_params = {
     'n_estimators': 1000,

@@ -9,11 +9,11 @@ from catboost import CatBoostClassifier
 
 from data_transformer import DataTransformer
 
-ENGLAND_DATA_PATH = 'data/england.csv'
-FRANCE_DATA_PATH = 'data/france.csv'
-GERMANY_DATA_PATH = 'data/germany.csv'
-ITALY_DATA_PATH = 'data/italy.csv'
-SPAIN_DATA_PATH = 'data/spain.csv'
+ENGLAND_DATA_PATH = 'data/england.csv.gz'
+FRANCE_DATA_PATH = 'data/france.csv.gz'
+GERMANY_DATA_PATH = 'data/germany.csv.gz'
+ITALY_DATA_PATH = 'data/italy.csv.gz'
+SPAIN_DATA_PATH = 'data/spain.csv.gz'
 FEATURES_PATH = 'data/features.yaml'
 
 
@@ -21,11 +21,11 @@ class Predictor:
 
     def __init__(self, dataset):
 
-        raw_england_data = pd.read_csv(ENGLAND_DATA_PATH)
-        raw_france_data = pd.read_csv(FRANCE_DATA_PATH)
-        raw_germany_data = pd.read_csv(GERMANY_DATA_PATH)
-        raw_italy_data = pd.read_csv(ITALY_DATA_PATH)
-        raw_spain_data = pd.read_csv(SPAIN_DATA_PATH)
+        raw_england_data = pd.read_csv(ENGLAND_DATA_PATH, compression='gzip')
+        raw_france_data = pd.read_csv(FRANCE_DATA_PATH, compression='gzip')
+        raw_germany_data = pd.read_csv(GERMANY_DATA_PATH, compression='gzip')
+        raw_italy_data = pd.read_csv(ITALY_DATA_PATH, compression='gzip')
+        raw_spain_data = pd.read_csv(SPAIN_DATA_PATH, compression='gzip')
 
         self.raw_train_data = pd.concat(
             [
