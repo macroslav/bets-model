@@ -6,9 +6,7 @@ class ROIChecker:
 
     def __init__(
         self,
-        country_names,
-        leagues,
-        start_bank: int = 5000,
+        start_bank: int = 50000,
         static_bet: int = 50,
         percent_of_bank: float = 0.01,
         roi_threshold: float = 0,
@@ -21,6 +19,8 @@ class ROIChecker:
         self.current_static_bank = self.start_bank
         self.percent_of_bank = percent_of_bank
         self.roi_threshold = roi_threshold
+        self.win_rate = 0.25
+        self.total_bank = start_bank
 
         self.detail_static_bank_values = [self.start_bank]
         self.batch_static_bank_values = [self.start_bank]
@@ -37,8 +37,6 @@ class ROIChecker:
         self.preds_proba_total = None
         self.preds_proba_both = None
 
-        self.country_names = country_names
-        self.leagues = leagues
         self.countries_results = {}
 
     def run_check(
@@ -51,7 +49,6 @@ class ROIChecker:
         preds_proba_total=None,
         preds_proba_both=None,
     ):
-
         self.preds_proba_result = preds_proba_result
         self.preds_proba_total = preds_proba_total
         self.preds_proba_both = preds_proba_both
@@ -60,7 +57,10 @@ class ROIChecker:
         self.total_target = total_target.reset_index()['total_target']
         self.both_target = both_target.reset_index()['both_target']
 
-        predictions = self.make_predictions()
+        if self.preds_proba_result is None:
+            predictions = []
+        else:
+            predictions = self.make_predictions()
         if self.preds_proba_total is None:
             total_predictions = []
         else:
@@ -105,7 +105,7 @@ class ROIChecker:
                         'chance': chance,
                         'date': row['timestamp_date'],
                         'index': i,
-                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                        'country': f"{row['country']} {row['league']}"
                     }
                     results.append(result)
         return results
@@ -134,7 +134,7 @@ class ROIChecker:
                         'chance': chance,
                         'date': row['timestamp_date'],
                         'index': i,
-                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                        'country': f"{row['country']} {row['league']}"
                     }
                     results.append(result)
         return results
@@ -163,7 +163,7 @@ class ROIChecker:
                         'chance': chance,
                         'date': row['timestamp_date'],
                         'index': i,
-                        'country': f"{self.country_names[row['country']]} {self.leagues[row['league']]}"
+                        'country': f"{row['country']} {row['league']}"
                     }
                     results.append(result)
         return results
@@ -201,7 +201,7 @@ class ROIChecker:
         win_bank = 0
         lose_bank = 0
         for index, row in enumerate(predictions):
-            if row['chance'] > self.roi_threshold:
+            if row['chance'] > self.roi_threshold and row['country']:
                 country = row['country']
                 try:
                     c[country]
@@ -214,7 +214,7 @@ class ROIChecker:
                 result_accepted_bets += 1
                 accepted_coef = row['coef']
                 i = row['index']
-
+                # self.dynamic_bet = ((row['chance'] * accepted_coef - 1) / (accepted_coef - 1)) * self.total_bank * self.win_rate
                 if self.result_target[i] == row['bet']:
 
                     current_profit = self.dynamic_bet * (accepted_coef - 1)
@@ -243,7 +243,7 @@ class ROIChecker:
             else:
                 skipped_bets += 1
         for index, row in enumerate(total_predictions):
-            if row['chance'] > self.roi_threshold:
+            if row['chance'] > self.roi_threshold and row['country']:
                 country = row['country']
                 try:
                     c[country]
@@ -256,6 +256,8 @@ class ROIChecker:
                 total_accepted_bets += 1
                 accepted_coef = row['coef']
                 i = row['index']
+
+                # self.dynamic_bet = ((row['chance'] * accepted_coef - 1) / (accepted_coef - 1)) * self.total_bank * self.win_rate
 
                 if self.total_target[i] == row['bet']:
 
@@ -286,7 +288,7 @@ class ROIChecker:
                 skipped_bets += 1
 
         for index, row in enumerate(both_predictions):
-            if row['chance'] > self.roi_threshold:
+            if row['chance'] > self.roi_threshold and row['country']:
                 country = row['country']
                 try:
                     c[country]
@@ -299,6 +301,8 @@ class ROIChecker:
                 both_accepted_bets += 1
                 accepted_coef = row['coef']
                 i = row['index']
+
+                # self.dynamic_bet = ((row['chance'] * accepted_coef - 1) / (accepted_coef - 1)) * self.total_bank * self.win_rate
 
                 if self.both_target[i] == row['bet']:
 
@@ -407,7 +411,7 @@ class ROIChecker:
             'win_rate': win_bets / accepted_bets if accepted_bets > 0 else 0,
             'countries': countries,
         }
-        print(OrderedDict(sorted(countries.items(), key=lambda i: i[1]['roi'])))
+        print(OrderedDict(sorted(countries.items(), key=lambda i: i[1]['roi'], reverse=True)))
         print(self.current_static_bank)
         print(result)
         self.dynamic_bet = self.current_static_bank * self.percent_of_bank
@@ -507,6 +511,8 @@ class ROIChecker:
         percent_profit = round((total_bank - self.start_bank) / self.start_bank * 100, 2)
         profit = total_bank - self.start_bank
         print(OrderedDict(sorted(self.countries_results.items(), key=lambda i: i[1]['roi'], reverse=True)))
+        self.win_rate = win_rate
+        self.total_bank = total_bank
         print(
             {
                 'roi': round((average_win_coef * win_rate - 1) * 100, 2),

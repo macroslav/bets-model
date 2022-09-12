@@ -1,4 +1,5 @@
 import yaml
+from datetime import datetime
 
 import pandas as pd
 import seaborn as sns
@@ -79,45 +80,90 @@ train = train.reset_index(drop=True)
 cat_features = list(categorical_features)
 
 
-def get_cv_data(train_data, train_initial_size=1600, window=500):
-    for index in range(0, train_data.shape[0] - train_initial_size - window + 1, window):
-        train_cv = train_data.loc[:train_initial_size + index]
-        val_cv = train_data.loc[train_initial_size + index: train_initial_size + index + window]
+def get_cv_data_by_time(
+    data,
+    start_from_season: str = '2017-2018',
+    unit: str = 'weeks',
+    days: int = 7,
+    weeks: int = 1,
+    benchmark_league: str = 'premier-league',
+    start_date=None,
+    finish_date=None,
+):
+    if start_date:
+        start_time = int(datetime.strptime(start_date, '%Y-%m-%d').timestamp())
+    else:
+        start_time = int(data[(data.season == start_from_season) & (data.league == benchmark_league)].timestamp_date.min())
+    if finish_date:
+        finish_time = int(datetime.strptime(finish_date, '%Y-%m-%d').timestamp())
+    else:
+        finish_time = int(data.timestamp_date.max())
+
+    window = 24 * 3600
+    if unit == 'days':
+        window *= days
+    elif unit == 'weeks':
+        window *= weeks * 7
+    print(start_time)
+    print(finish_time)
+    print(window)
+    for period in range(start_time, finish_time, window):
+        train_cv = data.loc[data.timestamp_date < period]
+        val_cv = data.loc[(data.timestamp_date > period) & (data.timestamp_date <= period + window)]
         yield train_cv, val_cv
 
 
-cv_scorer = ROIChecker(country_names=decode_labels['country_names'], leagues=decode_labels['leagues'])
+cv_scorer = ROIChecker()
 
 model_params = {
-    'n_estimators': 1000,
-    'depth': 10,
-    'learning_rate': 0.03,
     'loss_function': 'Logloss',
-    'verbose': 250,
+    'depth': 1, 'iterations': 2500, 'colsample_bylevel': 0.06, 'boosting_type': 'Plain',
+    'bootstrap_type': 'Bayesian', 'learning_rate': 0.05, 'l2_leaf_reg': 20, 'auto_class_weights': 'None',
+    'random_strength': 7, 'bagging_temperature': 5,
+    'verbose': 1000,
+    'random_state': 322,
+}
+
+both_model_params = {
+    'loss_function': 'Logloss',
+    'depth': 1, 'iterations': 2500, 'colsample_bylevel': 0.06, 'boosting_type': 'Plain',
+    'bootstrap_type': 'Bayesian', 'learning_rate': 0.05, 'l2_leaf_reg': 20, 'auto_class_weights': 'None',
+    'random_strength': 7, 'bagging_temperature': 5,
+    'verbose': 1000,
     'random_state': 322,
 }
 
 cv_model_result = CatBoostClassifier(**{
-    'n_estimators': 500,
     'loss_function': 'MultiClass',
-    'depth': 6,
-    'learning_rate': 0.03,
-    'verbose': 250,
+    'depth': 6, 'iterations': 2500, 'colsample_bylevel': 0.06, 'boosting_type': 'Plain',
+    'bootstrap_type': 'Bayesian', 'learning_rate': 0.05, 'l2_leaf_reg': 20, 'auto_class_weights': 'None',
+    'random_strength': 7, 'bagging_temperature': 5,
+    'verbose': 1000,
     'random_state': 322,
 })
-# cv_model_total = CatBoostClassifier(**model_params)
-# cv_model_both = CatBoostClassifier(**model_params)
+cv_model_total = CatBoostClassifier(**model_params)
+cv_model_both = CatBoostClassifier(**both_model_params)
 
 iteration = 0
-for cv_train, cv_test in get_cv_data(train):
+
+print(list(cat_features))
+
+START_DATE = '2021-07-01'
+FINISH_DATE = '2021-06-30'
+for cv_train, cv_test in get_cv_data_by_time(train, start_date=START_DATE):
+    if cv_test.shape[0] == 0:
+        print(f"Iteration #{iteration} skipped, no matches")
+        print('_______')
+        iteration += 1
+        continue
     cv_y_train_result = cv_train.result_target
     cv_y_train_total = cv_train.total_target
     cv_y_train_both = cv_train.both_target
     cv_X_train = cv_train.drop(columns=['result_target', 'total_target', 'both_target'])
 
-    cv_model_result.fit(cv_X_train, cv_y_train_result)
-    # cv_model_total.fit(cv_X_train, cv_y_train_total)
-    # cv_model_both.fit(cv_X_train, cv_y_train_both)
+    cv_model_result.fit(cv_X_train, cv_y_train_result, cat_features=cat_features)
+    # cv_model_total.fit(cv_X_train, cv_y_train_total, cat_features=cat_features)
+    # cv_model_both.fit(cv_X_train, cv_y_train_both, cat_features=cat_features)
 
     result_target = cv_test.result_target
     total_target = cv_test.total_target
@@ -128,17 +174,22 @@ for cv_train, cv_test in get_cv_data(train):
     # preds_proba_total = cv_model_total.predict_proba(cv_X_test)
     # preds_proba_both = cv_model_both.predict_proba(cv_X_test)
 
+    imp = dict(zip(cv_X_test.columns, cv_model_result.get_feature_importance()))
+    print(sorted(imp.items(), key=lambda item: item[1], reverse=True))
+
     cv_scorer.run_check(
         cv_X_test,
         result_target,
         total_target,
         both_target,
         preds_proba_result=preds_proba_result,
+        # preds_proba_total=preds_proba_total,
+        # preds_proba_both=preds_proba_both,
     )
 
-    iteration += 1
     print(f"Iteration #{iteration} complete!")
     print('_______')
+    iteration += 1
 
 dynamic_info, static_info = cv_scorer.return_info()
 sns.lineplot(x=[i for i in range(len(static_info[2]))], y=static_info[2])

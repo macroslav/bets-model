@@ -67,14 +67,76 @@ transformer = DataTransformer(transformer_context)
 train, decode_labels = transformer.run_logic()
 train = train.reset_index(drop=True)
 
-train_dataset = train.loc[:40500]
-test_dataset = train.loc[40500:].reset_index()
+train_dataset = train.loc[:45000]
+test_dataset = train.loc[45000:].reset_index()
 
 
-y_train = train_dataset.result_target.reset_index()['result_target']
-y_test = test_dataset.result_target.reset_index()['result_target']
+y_train = train_dataset.both_target.reset_index()['both_target']
+y_test = test_dataset.both_target.reset_index()['both_target']
 train_dataset = train_dataset.drop(columns=['result_target', 'total_target', 'both_target'])
 test_dataset = test_dataset.drop(columns=['result_target', 'total_target', 'both_target'])
+
+cat_features = list(categorical_features)
+
+print(list(cat_features))
+
+
+def make_both_predictions(proba, test):
+    results = []
+    for i, row in test.iterrows():
+        yes_value = proba[i][1] * row['both_team_to_score_yes']
+        no_value = proba[i][0] * row['both_team_to_score_no']
+        values = [no_value, yes_value]
+        for index, value in enumerate(values):
+            if value > 1:
+                if value == 0:
+                    bet = 0
+                    coef = row['both_team_to_score_no']
+                    chance = proba[i][0]
+                else:
+                    bet = 1
+                    coef = row['both_team_to_score_yes']
+                    chance = proba[i][1]
+                result = {
+                    'league': row['league'],
+                    'season': row['season'],
+                    'bet': bet,
+                    'coef': coef,
+                    'chance': chance,
+                    'date': row['timestamp_date'],
+                    'index': i,
+                }
+                results.append(result)
+    return results
+
+
+def make_total_predictions(proba, test):
+    results = []
+    for i, row in test.iterrows():
+        over_value = proba[i][1] * row['total_over_25_rate']
+        under_value = proba[i][0] * row['total_under_25_rate']
+        values = [under_value, over_value]
+        for index, value in enumerate(values):
+            if value > 1:
+                if value == 0:
+                    bet = 0
+                    coef = row['total_under_25_rate']
+                    chance = proba[i][0]
+                else:
+                    bet = 1
+                    coef = row['total_over_25_rate']
+                    chance = proba[i][1]
+                result = {
+                    'league': row['league'],
+                    'season': row['season'],
+                    'bet': bet,
+                    'coef': coef,
+                    'chance': chance,
+                    'date': row['timestamp_date'],
+                    'index': i,
+                }
+                results.append(result)
+    return results
 
 
 def make_predictions(proba, test):
@@ -131,21 +193,28 @@ def objective(trial):
     #  При получении лучших параметров нужно прогонять на них pipeline.py
     #  И фиксировать результаты в https://trello.com/c/uGpuNYUz
     params = {
-        'depth': 1,
-        'iterations': trial.suggest_int('iterations', 5000, 7000),
-        'colsample_bylevel': 0.09805089887364203,
-        "boosting_type": "Ordered",
-        "bootstrap_type": "Bayesian",
-        'learning_rate': trial.suggest_float('learning_rate', 0.03, 0.1),
-        'l2_leaf_reg': trial.suggest_int('l2_leaf_reg', 5, 20),
+        'depth': trial.suggest_int('depth', 1, 5),
+        'iterations': trial.suggest_int('iterations', 50, 5000),
+        'colsample_bylevel': trial.suggest_float('colsample_bylevel', 0.01, 0.1),
+        "boosting_type": trial.suggest_categorical("boosting_type", ["Ordered", "Plain"]),
+        "bootstrap_type": trial.suggest_categorical(
+            "bootstrap_type", ["Bayesian", "Bernoulli", "MVS"]
+        ),
+        'learning_rate': trial.suggest_float('learning_rate', 0.005, 0.5),
+        'l2_leaf_reg': trial.suggest_int('l2_leaf_reg', 3, 50),
+        'auto_class_weights': trial.suggest_categorical('auto_class_weights', ['None', 'Balanced', 'SqrtBalanced']),
+        'random_strength': trial.suggest_int('random_strength', 1, 10),
         'random_state': 322,
-        'verbose': 250,
-        'loss_function': 'MultiClass',
-        'bagging_temperature': 4.087227192055693,
-        'used_ram_limit': '2gb',
+        'verbose': 1000,
+        'loss_function': 'Logloss',
+        'used_ram_limit': '3.5gb',
     }
+    if params["bootstrap_type"] == "Bayesian":
+        params["bagging_temperature"] = trial.suggest_float("bagging_temperature", 0, 10)
+    elif params["bootstrap_type"] == "Bernoulli":
+        params["subsample"] = trial.suggest_float("subsample", 0.1, 1)
     model = CatBoostClassifier(**params)
-    model.fit(train_dataset, y_train)
+    model.fit(train_dataset, y_train, cat_features=cat_features)
     proba = model.predict_proba(test_dataset)
     predictions = make_predictions(proba, test_dataset)
     return get_score(predictions, y_test)
