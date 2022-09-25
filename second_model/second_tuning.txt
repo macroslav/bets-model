@@ -1,0 +1,249 @@
+{'depth': 2, 'iterations': 50, 'colsample_bylevel': 0.05547441974849235, 'boosting_type': 'Ordered', 'bootstrap_type': 'MVS', 'learning_rate': 0.264466213401077, 'l2_leaf_reg': 32, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -0.486880466472317, 'win_rate': 0.6015549076773566, 'coef': 1.6542649434571888, 'matches': 1029, 'wins': 619}
+_____
+{'depth': 8, 'iterations': 1375, 'colsample_bylevel': 0.06669378705798608, 'boosting_type': 'Plain', 'bootstrap_type': 'MVS', 'learning_rate': 0.20695565375200614, 'l2_leaf_reg': 44, 'auto_class_weights': 'None', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -0.7086092715231862, 'win_rate': 0.6264900662251656, 'coef': 1.5848837209302324, 'matches': 755, 'wins': 473}
+_____
+{'depth': 2, 'iterations': 4331, 'colsample_bylevel': 0.04271130907483784, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2777731131339254, 'l2_leaf_reg': 30, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 1, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.5339114855347864}
+{'roi': -2.1428571428571574, 'win_rate': 0.5603256846780162, 'coef': 1.7464332892998677, 'matches': 1351, 'wins': 757}
+_____
+{'depth': 7, 'iterations': 3790, 'colsample_bylevel': 0.09943592887751108, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.3985604902928108, 'l2_leaf_reg': 30, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.43819350875260576}
+{'roi': -3.814882032667899, 'win_rate': 0.5163339382940109, 'coef': 1.8628471001757465, 'matches': 1102, 'wins': 569}
+_____
+{'depth': 10, 'iterations': 7606, 'colsample_bylevel': 0.08566105136528022, 'boosting_type': 'Plain', 'bootstrap_type': 'MVS', 'learning_rate': 0.19515473702907155, 'l2_leaf_reg': 32, 'auto_class_weights': 'Balanced', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -2.351206434316344, 'win_rate': 0.4832439678284182, 'coef': 2.020693481276006, 'matches': 1492, 'wins': 721}
+_____
+{'depth': 3, 'iterations': 3999, 'colsample_bylevel': 0.09741186974280142, 'boosting_type': 'Ordered', 'bootstrap_type': 'MVS', 'learning_rate': 0.22001634383770552, 'l2_leaf_reg': 28, 'auto_class_weights': 'Balanced', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -5.234388551604507, 'win_rate': 0.3818300086730269, 'coef': 2.4818796138557637, 'matches': 4612, 'wins': 1761}
+_____
+{'depth': 8, 'iterations': 3522, 'colsample_bylevel': 0.06501235015578183, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.16799836238513366, 'l2_leaf_reg': 49, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 8, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.6625358410551352}
+{'roi': -1.9309440559440505, 'win_rate': 0.5568181818181818, 'coef': 1.7612401883830457, 'matches': 1144, 'wins': 637}
+_____
+{'depth': 9, 'iterations': 3723, 'colsample_bylevel': 0.059873252409116826, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.023524055477527263, 'l2_leaf_reg': 42, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 4.047272986764517}
+{'roi': -0.6032608695652475, 'win_rate': 0.5942028985507246, 'coef': 1.672774390243902, 'matches': 1104, 'wins': 656}
+_____
+{'depth': 5, 'iterations': 4036, 'colsample_bylevel': 0.08931747393013728, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.3105066837667168, 'l2_leaf_reg': 9, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 2, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.385221460573855}
+{'roi': -3.067704807041305, 'win_rate': 0.5118483412322274, 'coef': 1.8937698412698414, 'matches': 1477, 'wins': 756}
+_____
+{'depth': 7, 'iterations': 9982, 'colsample_bylevel': 0.0878062306281732, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.07617065292390675, 'l2_leaf_reg': 20, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.7690391977775728}
+{'roi': -2.607843137254906, 'win_rate': 0.5659536541889483, 'coef': 1.7208503937007875, 'matches': 1122, 'wins': 635}
+_____
+{'depth': 8, 'iterations': 4889, 'colsample_bylevel': 0.06622475906659045, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.09839200091104196, 'l2_leaf_reg': 14, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.4495118271143945}
+{'roi': -4.03697024346259, 'win_rate': 0.5590622182146078, 'coef': 1.7164999999999997, 'matches': 1109, 'wins': 620}
+_____
+{'depth': 5, 'iterations': 6753, 'colsample_bylevel': 0.010568133696482589, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.10108127842848719, 'l2_leaf_reg': 4, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.29833163221195313}
+{'roi': -3.1827744904668, 'win_rate': 0.5443786982248521, 'coef': 1.7784903381642512, 'matches': 1521, 'wins': 828}
+_____
+{'depth': 3, 'iterations': 6091, 'colsample_bylevel': 0.015108260281283517, 'boosting_type': 'Ordered', 'bootstrap_type': 'MVS', 'learning_rate': 0.40145081327507837, 'l2_leaf_reg': 22, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -2.952114924181992, 'win_rate': 0.5411013567438149, 'coef': 1.793525073746312, 'matches': 1253, 'wins': 678}
+_____
+{'depth': 7, 'iterations': 2510, 'colsample_bylevel': 0.016061808705928184, 'boosting_type': 'Plain', 'bootstrap_type': 'MVS', 'learning_rate': 0.024577130219158944, 'l2_leaf_reg': 31, 'auto_class_weights': 'None', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -1.2144927536231975, 'win_rate': 0.6420289855072464, 'coef': 1.5386455981941307, 'matches': 690, 'wins': 443}
+_____
+{'depth': 1, 'iterations': 9254, 'colsample_bylevel': 0.03792661461359645, 'boosting_type': 'Ordered', 'bootstrap_type': 'MVS', 'learning_rate': 0.01566135498582352, 'l2_leaf_reg': 44, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 2, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -1.1751072961373454, 'win_rate': 0.5854077253218885, 'coef': 1.6881378299120233, 'matches': 1165, 'wins': 682}
+_____
+{'depth': 5, 'iterations': 4893, 'colsample_bylevel': 0.09458155182215633, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.19396466040664476, 'l2_leaf_reg': 17, 'auto_class_weights': 'Balanced', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 8.45344063233819}
+{'roi': -1.9421586165772275, 'win_rate': 0.5122242098986285, 'coef': 1.9143538998835854, 'matches': 1677, 'wins': 859}
+_____
+{'depth': 3, 'iterations': 5350, 'colsample_bylevel': 0.06204424563987649, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.45806326670212094, 'l2_leaf_reg': 17, 'auto_class_weights': 'None', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 0.005597190110574468}
+{'roi': 2.3217821782178127, 'win_rate': 0.6175742574257426, 'coef': 1.6568336673346693, 'matches': 808, 'wins': 499}
+_____
+{'depth': 6, 'iterations': 7703, 'colsample_bylevel': 0.052997636815164124, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.08764392025521307, 'l2_leaf_reg': 23, 'auto_class_weights': 'Balanced', 'random_strength': 1, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.9788612551139573}
+{'roi': -5.551989150090408, 'win_rate': 0.4755877034358047, 'coef': 1.9859220532319393, 'matches': 2212, 'wins': 1052}
+_____
+{'depth': 6, 'iterations': 9319, 'colsample_bylevel': 0.024192871009705783, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.499394002850302, 'l2_leaf_reg': 45, 'auto_class_weights': 'None', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.2824861726360845}
+{'roi': -2.183673469387748, 'win_rate': 0.6581632653061225, 'coef': 1.486201550387597, 'matches': 392, 'wins': 258}
+_____
+{'depth': 7, 'iterations': 4292, 'colsample_bylevel': 0.07898996450093192, 'boosting_type': 'Plain', 'bootstrap_type': 'MVS', 'learning_rate': 0.30609070223031926, 'l2_leaf_reg': 26, 'auto_class_weights': 'Balanced', 'random_strength': 10, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -4.014758497316617, 'win_rate': 0.4543828264758497, 'coef': 2.1124311023622053, 'matches': 2236, 'wins': 1016}
+_____
+{'depth': 10, 'iterations': 689, 'colsample_bylevel': 0.050702087664608056, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.4950405174585727, 'l2_leaf_reg': 4, 'auto_class_weights': 'None', 'random_strength': 9, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 0.023137705036964613}
+{'roi': -1.3721854304635905, 'win_rate': 0.590728476821192, 'coef': 1.6695964125560536, 'matches': 755, 'wins': 446}
+_____
+{'depth': 1, 'iterations': 9792, 'colsample_bylevel': 0.039222793259444756, 'boosting_type': 'Ordered', 'bootstrap_type': 'MVS', 'learning_rate': 0.2676321166085349, 'l2_leaf_reg': 50, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 8, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -2.32896890343699, 'win_rate': 0.5736497545008183, 'coef': 1.7026248216833095, 'matches': 1222, 'wins': 701}
+_____
+{'depth': 1, 'iterations': 8101, 'colsample_bylevel': 0.0354344049839921, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.34879600354950835, 'l2_leaf_reg': 37, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 1, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 4.44104567488355}
+{'roi': -1.9222948438634813, 'win_rate': 0.5591866376180101, 'coef': 1.753935064935065, 'matches': 1377, 'wins': 770}
+_____
+{'depth': 3, 'iterations': 2825, 'colsample_bylevel': 0.06984490878445097, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.1940167452539486, 'l2_leaf_reg': 37, 'auto_class_weights': 'None', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 6.375223151872765}
+{'roi': -0.6603174603174833, 'win_rate': 0.6317460317460317, 'coef': 1.5724623115577887, 'matches': 630, 'wins': 398}
+_____
+{'depth': 3, 'iterations': 3046, 'colsample_bylevel': 0.07204662638273839, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.18859103509525876, 'l2_leaf_reg': 35, 'auto_class_weights': 'None', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 7.62951100429779}
+{'roi': 1.0192307692307834, 'win_rate': 0.6794871794871795, 'coef': 1.4866981132075472, 'matches': 468, 'wins': 318}
+_____
+{'depth': 3, 'iterations': 3341, 'colsample_bylevel': 0.09134783869712135, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.4147833849065193, 'l2_leaf_reg': 12, 'auto_class_weights': 'None', 'random_strength': 8, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 9.894657008590556}
+{'roi': -5.793478260869556, 'win_rate': 0.5869565217391305, 'coef': 1.605, 'matches': 552, 'wins': 324}
+_____
+{'depth': 4, 'iterations': 1323, 'colsample_bylevel': 0.07729864246904398, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.20138113070439137, 'l2_leaf_reg': 32, 'auto_class_weights': 'None', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 5.862874763628201}
+{'roi': -4.230946882217079, 'win_rate': 0.6535796766743649, 'coef': 1.4653003533568907, 'matches': 433, 'wins': 283}
+_____
+{'depth': 2, 'iterations': 6222, 'colsample_bylevel': 0.06372498509701556, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2362902647369582, 'l2_leaf_reg': 19, 'auto_class_weights': 'None', 'random_strength': 8, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.3919237227339574}
+{'roi': -0.8313458262351192, 'win_rate': 0.645655877342419, 'coef': 1.5359366754617412, 'matches': 587, 'wins': 379}
+_____
+{'depth': 4, 'iterations': 1878, 'colsample_bylevel': 0.0842740356166985, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.14275657829256616, 'l2_leaf_reg': 9, 'auto_class_weights': 'None', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 7.63454648915388}
+{'roi': -4.04793028322441, 'win_rate': 0.6514161220043573, 'coef': 1.4729765886287625, 'matches': 459, 'wins': 299}
+_____
+{'depth': 2, 'iterations': 82, 'colsample_bylevel': 0.059221910440215283, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.348005821678279, 'l2_leaf_reg': 30, 'auto_class_weights': 'None', 'random_strength': 10, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 0.13886750774200607}
+{'roi': -1.3858156028368929, 'win_rate': 0.6368794326241135, 'coef': 1.5483964365256122, 'matches': 705, 'wins': 449}
+_____
+{'depth': 4, 'iterations': 3895, 'colsample_bylevel': 0.04663641151809193, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.42988855006418564, 'l2_leaf_reg': 39, 'auto_class_weights': 'Balanced', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.9756188315242247}
+{'roi': -4.047716428084536, 'win_rate': 0.4342194955691888, 'coef': 2.2097645211930925, 'matches': 2934, 'wins': 1274}
+_____
+{'depth': 3, 'iterations': 3287, 'colsample_bylevel': 0.07092266464315931, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.16794143221110605, 'l2_leaf_reg': 38, 'auto_class_weights': 'None', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 6.352189000660599}
+{'roi': -0.2556561085972797, 'win_rate': 0.6719457013574661, 'coef': 1.4844107744107744, 'matches': 442, 'wins': 297}
+_____
+{'depth': 2, 'iterations': 3678, 'colsample_bylevel': 0.06750878917595868, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.1562564594835028, 'l2_leaf_reg': 41, 'auto_class_weights': 'None', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 7.324709844393636}
+{'roi': -2.6007005253940396, 'win_rate': 0.6427320490367776, 'coef': 1.5153950953678474, 'matches': 571, 'wins': 367}
+_____
+{'depth': 3, 'iterations': 5768, 'colsample_bylevel': 0.07596411384835451, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2508645756188949, 'l2_leaf_reg': 34, 'auto_class_weights': 'None', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 4.613294350564795}
+{'roi': -0.5910714285714325, 'win_rate': 0.6446428571428572, 'coef': 1.5420775623268697, 'matches': 560, 'wins': 361}
+_____
+{'depth': 4, 'iterations': 2100, 'colsample_bylevel': 0.08765081538707852, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2999127556523753, 'l2_leaf_reg': 25, 'auto_class_weights': 'None', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 9.150650076846103}
+{'roi': -1.2235872235872192, 'win_rate': 0.6658476658476659, 'coef': 1.4834686346863468, 'matches': 407, 'wins': 271}
+_____
+{'depth': 2, 'iterations': 3067, 'colsample_bylevel': 0.060677897763964414, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.14174736335011145, 'l2_leaf_reg': 28, 'auto_class_weights': 'None', 'random_strength': 9, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 6.113707484824007}
+{'roi': -1.3014827018122066, 'win_rate': 0.6507413509060955, 'coef': 1.5167088607594934, 'matches': 607, 'wins': 395}
+_____
+{'depth': 5, 'iterations': 4408, 'colsample_bylevel': 0.07401678829950536, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.22951501178258532, 'l2_leaf_reg': 35, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.9948978847486087}
+{'roi': 0.34762633996936465, 'win_rate': 0.6278713629402757, 'coef': 1.598219512195122, 'matches': 653, 'wins': 410}
+_____
+{'depth': 5, 'iterations': 4469, 'colsample_bylevel': 0.09961016393212521, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.22852075367608565, 'l2_leaf_reg': 34, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.397431675247875}
+{'roi': -4.883928571428553, 'win_rate': 0.5863095238095238, 'coef': 1.622284263959391, 'matches': 672, 'wins': 394}
+_____
+{'depth': 10, 'iterations': 5523, 'colsample_bylevel': 0.08203145101755885, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.3014344825156947, 'l2_leaf_reg': 18, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.7891915315201692}
+{'roi': 2.5006305170239607, 'win_rate': 0.5586380832282472, 'coef': 1.8348306997742665, 'matches': 793, 'wins': 443}
+_____
+{'depth': 9, 'iterations': 5546, 'colsample_bylevel': 0.08365250472517463, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.371708351601725, 'l2_leaf_reg': 16, 'auto_class_weights': 'Balanced', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.8556789274969298}
+{'roi': -0.1846877098724109, 'win_rate': 0.4667562122229684, 'coef': 2.1384892086330933, 'matches': 1489, 'wins': 695}
+_____
+{'depth': 10, 'iterations': 7184, 'colsample_bylevel': 0.0574235101919808, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.4505188965226162, 'l2_leaf_reg': 13, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 2, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.7015383204523018}
+{'roi': -5.983112183353412, 'win_rate': 0.4505428226779252, 'coef': 2.0867469879518077, 'matches': 1658, 'wins': 747}
+_____
+{'depth': 8, 'iterations': 4948, 'colsample_bylevel': 0.07327504331293797, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2893429223626805, 'l2_leaf_reg': 22, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.9038201324363262}
+{'roi': 1.6102719033232793, 'win_rate': 0.5800604229607251, 'coef': 1.75171875, 'matches': 662, 'wins': 384}
+_____
+{'depth': 9, 'iterations': 5079, 'colsample_bylevel': 0.08069649385802832, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.3034351341843369, 'l2_leaf_reg': 20, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.1889130945590183}
+{'roi': -0.5783582089552208, 'win_rate': 0.5223880597014925, 'coef': 1.903214285714286, 'matches': 1072, 'wins': 560}
+_____
+{'depth': 8, 'iterations': 6754, 'colsample_bylevel': 0.06474690585020744, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2827939075521595, 'l2_leaf_reg': 9, 'auto_class_weights': 'None', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.1263254139416228}
+{'roi': -5.252707581227467, 'win_rate': 0.5114320096269555, 'coef': 1.8525882352941172, 'matches': 831, 'wins': 425}
+_____
+{'depth': 9, 'iterations': 5238, 'colsample_bylevel': 0.07257897901580576, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.08657986671513679, 'l2_leaf_reg': 21, 'auto_class_weights': 'None', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.159625856910579}
+{'roi': -1.7509225092251168, 'win_rate': 0.6383763837638377, 'coef': 1.5390462427745661, 'matches': 542, 'wins': 346}
+_____
+{'depth': 8, 'iterations': 6354, 'colsample_bylevel': 0.08910223031045454, 'boosting_type': 'Plain', 'bootstrap_type': 'MVS', 'learning_rate': 0.35109858111714787, 'l2_leaf_reg': 16, 'auto_class_weights': 'None', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -0.6756513926325258, 'win_rate': 0.5067385444743935, 'coef': 1.9600709219858157, 'matches': 1113, 'wins': 564}
+_____
+{'depth': 7, 'iterations': 5606, 'colsample_bylevel': 0.044914759386704806, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.3299332146777532, 'l2_leaf_reg': 23, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 0.7099616104761037}
+{'roi': -2.463324048282256, 'win_rate': 0.552460538532962, 'coef': 1.7654957983193278, 'matches': 1077, 'wins': 595}
+_____
+{'depth': 10, 'iterations': 4662, 'colsample_bylevel': 0.06551398506675175, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.45703075253300185, 'l2_leaf_reg': 28, 'auto_class_weights': 'None', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.1389012569524566}
+{'roi': -2.65805785123967, 'win_rate': 0.49793388429752067, 'coef': 1.9549170124481328, 'matches': 968, 'wins': 482}
+_____
+{'depth': 7, 'iterations': 7984, 'colsample_bylevel': 0.08286392460574549, 'boosting_type': 'Plain', 'bootstrap_type': 'MVS', 'learning_rate': 0.38237918294053097, 'l2_leaf_reg': 18, 'auto_class_weights': 'None', 'random_strength': 2, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -1.4992774566473632, 'win_rate': 0.4682080924855491, 'coef': 2.1037808641975317, 'matches': 1384, 'wins': 648}
+_____
+{'depth': 6, 'iterations': 3960, 'colsample_bylevel': 0.09436131157582416, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.1232687831269689, 'l2_leaf_reg': 8, 'auto_class_weights': 'Balanced', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 2.353448713832393}
+{'roi': -3.7855183763027767, 'win_rate': 0.4909489851892485, 'coef': 1.959765363128492, 'matches': 1823, 'wins': 895}
+_____
+{'depth': 10, 'iterations': 7138, 'colsample_bylevel': 0.05282351138271192, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2711673095830571, 'l2_leaf_reg': 25, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.1639069699943634}
+{'roi': 1.157046979865739, 'win_rate': 0.5704697986577181, 'coef': 1.7732235294117644, 'matches': 745, 'wins': 425}
+_____
+{'depth': 9, 'iterations': 7067, 'colsample_bylevel': 0.0548357002481483, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.27606645711604316, 'l2_leaf_reg': 24, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.017442154174745}
+{'roi': -4.053915275994868, 'win_rate': 0.5250320924261874, 'coef': 1.8274327628361857, 'matches': 779, 'wins': 409}
+_____
+{'depth': 10, 'iterations': 8397, 'colsample_bylevel': 0.0500624645668575, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.05755208809776957, 'l2_leaf_reg': 27, 'auto_class_weights': 'None', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 0.6450694584189591}
+{'roi': -2.342948717948745, 'win_rate': 0.6378205128205128, 'coef': 1.5311055276381906, 'matches': 624, 'wins': 398}
+_____
+{'depth': 8, 'iterations': 6610, 'colsample_bylevel': 0.06291741282606284, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.21265305396396555, 'l2_leaf_reg': 15, 'auto_class_weights': 'None', 'random_strength': 2, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 2.413958985594049}
+{'roi': -4.161399548532751, 'win_rate': 0.5474040632054176, 'coef': 1.750783505154639, 'matches': 886, 'wins': 485}
+_____
+{'depth': 10, 'iterations': 7499, 'colsample_bylevel': 0.06782649284900928, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.32243452423010044, 'l2_leaf_reg': 21, 'auto_class_weights': 'None', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.6443427436066658}
+{'roi': 0.8758389261744659, 'win_rate': 0.5335570469798657, 'coef': 1.8906289308176099, 'matches': 894, 'wins': 477}
+_____
+{'depth': 10, 'iterations': 8544, 'colsample_bylevel': 0.030057313076746476, 'boosting_type': 'Plain', 'bootstrap_type': 'MVS', 'learning_rate': 0.1801361908693398, 'l2_leaf_reg': 30, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -3.755102040816327, 'win_rate': 0.5261479591836735, 'coef': 1.8292363636363635, 'matches': 1568, 'wins': 825}
+_____
+{'depth': 9, 'iterations': 6001, 'colsample_bylevel': 0.0756403345124913, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2561863099356313, 'l2_leaf_reg': 12, 'auto_class_weights': 'None', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.8582336859155353}
+{'roi': 3.663803680981581, 'win_rate': 0.6049079754601226, 'coef': 1.713711967545639, 'matches': 815, 'wins': 493}
+_____
+{'depth': 9, 'iterations': 6041, 'colsample_bylevel': 0.04360646631010218, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.26490454895147947, 'l2_leaf_reg': 11, 'auto_class_weights': 'Balanced', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.7175049403009233}
+{'roi': -2.5690140845070264, 'win_rate': 0.483943661971831, 'coef': 2.013271245634459, 'matches': 1775, 'wins': 859}
+_____
+{'depth': 8, 'iterations': 5002, 'colsample_bylevel': 0.0769986219713329, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.24923067276875155, 'l2_leaf_reg': 18, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 2.6062527425871513}
+{'roi': -0.5647668393782501, 'win_rate': 0.6062176165803109, 'coef': 1.64025641025641, 'matches': 772, 'wins': 468}
+_____
+{'depth': 9, 'iterations': 5943, 'colsample_bylevel': 0.05274482939861537, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.38866627652813446, 'l2_leaf_reg': 14, 'auto_class_weights': 'None', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.6116199810681529}
+{'roi': -1.326283987915422, 'win_rate': 0.552870090634441, 'coef': 1.7847540983606556, 'matches': 662, 'wins': 366}
+_____
+{'depth': 8, 'iterations': 5339, 'colsample_bylevel': 0.057116466121338104, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.3181655378310525, 'l2_leaf_reg': 6, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 2, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 0.5125438059856587}
+{'roi': -2.4560885608856275, 'win_rate': 0.5335793357933579, 'coef': 1.8281051175656982, 'matches': 1355, 'wins': 723}
+_____
+{'depth': 10, 'iterations': 6591, 'colsample_bylevel': 0.07174380237705445, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.21101861017023738, 'l2_leaf_reg': 25, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.5946647287710434}
+{'roi': 0.8410596026489969, 'win_rate': 0.6198675496688741, 'coef': 1.6268162393162393, 'matches': 755, 'wins': 468}
+_____
+{'depth': 9, 'iterations': 4752, 'colsample_bylevel': 0.07948708831724795, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2876863661037363, 'l2_leaf_reg': 22, 'auto_class_weights': 'None', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 5.185658339601357}
+{'roi': -3.181249999999991, 'win_rate': 0.5979166666666667, 'coef': 1.619268292682927, 'matches': 480, 'wins': 287}
+_____
+{'depth': 10, 'iterations': 4082, 'colsample_bylevel': 0.060877654739098466, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.258897775501517, 'l2_leaf_reg': 11, 'auto_class_weights': 'None', 'random_strength': 1, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.9380189845766163}
+{'roi': 0.7449664429530101, 'win_rate': 0.614765100671141, 'coef': 1.6387554585152837, 'matches': 745, 'wins': 458}
+_____
+{'depth': 6, 'iterations': 7332, 'colsample_bylevel': 0.06897768922580562, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.48711383824672916, 'l2_leaf_reg': 49, 'auto_class_weights': 'None', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 0.41099974614922186}
+{'roi': -1.375000000000004, 'win_rate': 0.5980113636363636, 'coef': 1.6492161520190023, 'matches': 704, 'wins': 421}
+_____
+{'depth': 4, 'iterations': 6974, 'colsample_bylevel': 0.08684635247438549, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.18419569367535524, 'l2_leaf_reg': 43, 'auto_class_weights': 'None', 'random_strength': 8, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.7702981890629994}
+{'roi': 0.0324574961359847, 'win_rate': 0.6367851622874807, 'coef': 1.5708980582524268, 'matches': 647, 'wins': 412}
+_____
+{'depth': 3, 'iterations': 1418, 'colsample_bylevel': 0.07464769344148799, 'boosting_type': 'Ordered', 'bootstrap_type': 'MVS', 'learning_rate': 0.3375703817172516, 'l2_leaf_reg': 3, 'auto_class_weights': 'None', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -1.9426934097421134, 'win_rate': 0.5429799426934098, 'coef': 1.805910290237467, 'matches': 1396, 'wins': 758}
+_____
+{'depth': 9, 'iterations': 3570, 'colsample_bylevel': 0.0796974273631866, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.23949085384218785, 'l2_leaf_reg': 19, 'auto_class_weights': 'None', 'random_strength': 7, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 5.370003183707947}
+{'roi': 0.6196319018404672, 'win_rate': 0.6482617586912065, 'coef': 1.5521451104100945, 'matches': 489, 'wins': 317}
+_____
+{'depth': 1, 'iterations': 2677, 'colsample_bylevel': 0.04930315248136899, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.22014159764043148, 'l2_leaf_reg': 17, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 0.02232807411370594}
+{'roi': -1.990950226244348, 'win_rate': 0.6410256410256411, 'coef': 1.528941176470588, 'matches': 663, 'wins': 425}
+_____
+{'depth': 5, 'iterations': 6327, 'colsample_bylevel': 0.017129945019190046, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2931871549309918, 'l2_leaf_reg': 23, 'auto_class_weights': 'Balanced', 'random_strength': 9, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 7.582816471111912}
+{'roi': -3.6295888399412446, 'win_rate': 0.45301027900146845, 'coef': 2.127333873581848, 'matches': 2724, 'wins': 1234}
+_____
+{'depth': 10, 'iterations': 2339, 'colsample_bylevel': 0.04004319295510047, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.4123207284911727, 'l2_leaf_reg': 32, 'auto_class_weights': 'None', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 2.7395577892959126}
+{'roi': 3.0088397790055454, 'win_rate': 0.5911602209944752, 'coef': 1.7424859813084115, 'matches': 905, 'wins': 535}
+_____
+{'depth': 10, 'iterations': 1842, 'colsample_bylevel': 0.039097625808888974, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.41784181439098245, 'l2_leaf_reg': 31, 'auto_class_weights': 'None', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 2.200927307965948}
+{'roi': -1.9623329283110613, 'win_rate': 0.5941676792223572, 'coef': 1.65, 'matches': 823, 'wins': 489}
+_____
+{'depth': 10, 'iterations': 3070, 'colsample_bylevel': 0.04117870686441688, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.4758065557146669, 'l2_leaf_reg': 33, 'auto_class_weights': 'None', 'random_strength': 2, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 2.873177852419579}
+{'roi': -4.425614489003871, 'win_rate': 0.5705045278137129, 'coef': 1.6752607709750567, 'matches': 773, 'wins': 441}
+_____
+{'depth': 9, 'iterations': 2235, 'colsample_bylevel': 0.03310039517461992, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.4357431136339519, 'l2_leaf_reg': 29, 'auto_class_weights': 'None', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.844341264772044}
+{'roi': -3.009205983889529, 'win_rate': 0.5684695051783659, 'coef': 1.706174089068826, 'matches': 869, 'wins': 494}
+_____
+{'depth': 2, 'iterations': 466, 'colsample_bylevel': 0.0702121931305294, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.3631733324373311, 'l2_leaf_reg': 26, 'auto_class_weights': 'None', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 1.1749507163933308}
+{'roi': -1.4628514056224895, 'win_rate': 0.5893574297188755, 'coef': 1.6719420783645655, 'matches': 996, 'wins': 587}
+_____
+{'depth': 10, 'iterations': 1172, 'colsample_bylevel': 0.02729638737914062, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.39892547963311736, 'l2_leaf_reg': 13, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 4.621834402674093}
+{'roi': 1.3948126801152538, 'win_rate': 0.6296829971181557, 'coef': 1.6102517162471393, 'matches': 694, 'wins': 437}
+_____
+{'depth': 10, 'iterations': 1253, 'colsample_bylevel': 0.024628929879771264, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.4019925592742233, 'l2_leaf_reg': 13, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 4.382426562510302}
+{'roi': -0.7819383259911938, 'win_rate': 0.5825991189427313, 'coef': 1.703024574669187, 'matches': 908, 'wins': 529}
+_____
+{'depth': 10, 'iterations': 815, 'colsample_bylevel': 0.010889025589292708, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'learning_rate': 0.4487406987630595, 'l2_leaf_reg': 15, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'subsample': 0.7602207302356528}
+{'roi': 0.3266078184110732, 'win_rate': 0.6242118537200504, 'coef': 1.6072525252525252, 'matches': 793, 'wins': 495}
+_____
+{'depth': 9, 'iterations': 5432, 'colsample_bylevel': 0.025969710332039826, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.4115640667080188, 'l2_leaf_reg': 20, 'auto_class_weights': 'None', 'random_strength': 5, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 4.650399698653616}
+{'roi': -5.747146619841992, 'win_rate': 0.5250219490781387, 'coef': 1.7952173913043474, 'matches': 1139, 'wins': 598}
+_____
+{'depth': 10, 'iterations': 5822, 'colsample_bylevel': 0.021396883126060702, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.3889249254574724, 'l2_leaf_reg': 11, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 3, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 3.385709964445897}
+{'roi': -5.524791575252297, 'win_rate': 0.44975866608161474, 'coef': 2.1005756097560977, 'matches': 2279, 'wins': 1025}
+_____
+{'depth': 8, 'iterations': 120, 'colsample_bylevel': 0.032140903541082524, 'boosting_type': 'Plain', 'bootstrap_type': 'MVS', 'learning_rate': 0.3092232627369368, 'l2_leaf_reg': 9, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss'}
+{'roi': -1.6395348837209278, 'win_rate': 0.6139534883720931, 'coef': 1.6020833333333333, 'matches': 860, 'wins': 528}
+_____
+{'depth': 9, 'iterations': 2266, 'colsample_bylevel': 0.08207737095609292, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2766705208280698, 'l2_leaf_reg': 35, 'auto_class_weights': 'None', 'random_strength': 6, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 5.629908098374059}
+{'roi': 0.36192468619247187, 'win_rate': 0.6589958158995816, 'coef': 1.522952380952381, 'matches': 478, 'wins': 315}
+_____
+{'depth': 3, 'iterations': 1537, 'colsample_bylevel': 0.07730585159779843, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.47006986775336745, 'l2_leaf_reg': 40, 'auto_class_weights': 'None', 'random_strength': 4, 'random_state': 322, 'verbose': 1000, 'loss_function': 'Logloss', 'bagging_temperature': 6.886920849560159}
+{'roi': 0.08558558558557916, 'win_rate': 0.5934684684684685, 'coef': 1.6864516129032259, 'matches': 888, 'wins': 527}
+_____

@@ -1,0 +1,17 @@
+{'roi': -0.6879875195007878, 'win_rate': 0.49921996879875197, 'coef': 1.9893437499999997, 'matches': 641, 'wins': 320}
+[I 2022-09-20 00:45:27,409] Trial 2 finished with value: -0.6879875195007878 and parameters: {'depth': 10, 'iterations': 6797, 'colsample_bylevel': 0.041639412070642874, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.353587941703882, 'l2_leaf_reg': 8, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 10, 'bagging_temperature': 4.692556275779483}. Best is trial 2 with value: -0.6879875195007878.
+
+{'roi': 4.9523809523809526, 'win_rate': 0.7012987012987013, 'coef': 1.4965432098765432, 'matches': 231, 'wins': 162}
+[I 2022-09-20 03:47:42,699] Trial 35 finished with value: 4.9523809523809526 and parameters: {'depth': 8, 'iterations': 878, 'colsample_bylevel': 0.03821149739921447, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.28063704290839164, 'l2_leaf_reg': 16, 'auto_class_weights': 'None', 'random_strength': 2, 'bagging_temperature': 9.12816801995941}. Best is trial 35 with value: 4.9523809523809526.
+
+{'roi': 3.4201474201474014, 'win_rate': 0.5601965601965602, 'coef': 1.8461403508771927, 'matches': 407, 'wins': 228}
+[I 2022-09-20 02:55:15,181] Trial 23 finished with value: 3.4201474201474014 and parameters: {'depth': 10, 'iterations': 4747, 'colsample_bylevel': 0.03338506148261465, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.40965446699205915, 'l2_leaf_reg': 10, 'auto_class_weights': 'SqrtBalanced', 'random_strength': 4, 'bagging_temperature': 7.281935071712892}. Best is trial 23 with value: 3.4201474201474014.
+
+{'roi': 3.5523465703970913, 'win_rate': 0.6534296028880866, 'coef': 1.5847513812154694, 'matches': 277, 'wins': 181}
+[I 2022-09-20 03:52:26,796] Trial 39 finished with value: 3.5523465703970913 and parameters: {'depth': 4, 'iterations': 1171, 'colsample_bylevel': 0.05590937485228341, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.32040394037494535, 'l2_leaf_reg': 15, 'auto_class_weights': 'None', 'random_strength': 1, 'bagging_temperature': 9.84652412528079}. Best is trial 35 with value: 4.9523809523809526.
+
+{'roi': 4.535564853556484, 'win_rate': 0.694560669456067, 'coef': 1.5050602409638554, 'matches': 239, 'wins': 166}
+[I 2022-09-20 05:49:54,965] Trial 73 finished with value: 4.535564853556484 and parameters: {'depth': 8, 'iterations': 5100, 'colsample_bylevel': 0.033572028389410084, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.2754539796026887, 'l2_leaf_reg': 39, 'auto_class_weights': 'None', 'random_strength': 7, 'bagging_temperature': 6.976807184706892}. Best is trial 35 with value: 4.9523809523809526.
+
+{'roi': 3.1451612903225623, 'win_rate': 0.6491935483870968, 'coef': 1.5888198757763974, 'matches': 248, 'wins': 161}
+[I 2022-09-20 06:14:17,893] Trial 79 finished with value: 3.1451612903225623 and parameters: {'depth': 8, 'iterations': 2129, 'colsample_bylevel': 0.0405280810248014, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'learning_rate': 0.3328784066249139, 'l2_leaf_reg': 32, 'auto_class_weights': 'None', 'random_strength': 1, 'bagging_temperature': 8.097760988627517}. Best is trial 35 with value: 4.9523809523809526.
