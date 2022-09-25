@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 from collections import Counter, OrderedDict
 
@@ -84,7 +86,7 @@ class ROIChecker:
             draw_value = self.preds_proba_result[i][1] * row['draw_rate']
             values = [home_value, away_value, draw_value]
             for index, value in enumerate(values):
-                if value > 1:
+                if value > 0:
                     if index == 0:
                         bet = 3
                         coef = row['home_win_rate']
@@ -98,6 +100,8 @@ class ROIChecker:
                         coef = row['draw_rate']
                         chance = self.preds_proba_result[i][1]
                     result = {
+                        'home_team': row['home_team'],
+                        'away_team': row['away_team'],
                         'league': row['league'],
                         'season': row['season'],
                         'bet': bet,
@@ -105,7 +109,8 @@ class ROIChecker:
                         'chance': chance,
                         'date': row['timestamp_date'],
                         'index': i,
-                        'country': f"{row['country']} {row['league']}"
+                        'country': row['country'],
+                        'value': value,
                     }
                     results.append(result)
         return results
@@ -237,6 +242,21 @@ class ROIChecker:
                     lose_bank -= self.dynamic_bet
                     lose_bets += 1
 
+                info = {
+                    'home_team': row['home_team'],
+                    'away_team': row['away_team'],
+                    'bet': row['bet'],
+                    'country': row['country'],
+                    'league': row['league'],
+                    'date': row['date'],
+                    'is_correct': int(self.result_target[i] == row['bet']),
+                    'season': row['season'],
+                    'coef': row['coef'],
+                    'chance': row['chance'],
+                    'value': row['value'],
+                }
+                with open('file.txt', 'a') as f:
+                    f.write(str(info) + '\n')
                 total_coef += accepted_coef
                 self.detail_static_bank_values.append(self.current_static_bank)
 

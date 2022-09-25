@@ -14,6 +14,8 @@ FRANCE_DATA_PATH = 'data/france.csv.gz'
 GERMANY_DATA_PATH = 'data/germany.csv.gz'
 ITALY_DATA_PATH = 'data/italy.csv.gz'
 SPAIN_DATA_PATH = 'data/spain.csv.gz'
+RUSSIA_DATA_PATH = 'data/russia.csv.gz'
+PORTUGAL_DATA_PATH = 'data/portugal.csv.gz'
 FEATURES_PATH = 'data/features.yaml'
 
 raw_england_data = pd.read_csv(ENGLAND_DATA_PATH, compression='gzip')
@@ -21,6 +23,8 @@ raw_france_data = pd.read_csv(FRANCE_DATA_PATH, compression='gzip')
 raw_germany_data = pd.read_csv(GERMANY_DATA_PATH, compression='gzip')
 raw_italy_data = pd.read_csv(ITALY_DATA_PATH, compression='gzip')
 raw_spain_data = pd.read_csv(SPAIN_DATA_PATH, compression='gzip')
+raw_russia_data = pd.read_csv(RUSSIA_DATA_PATH, compression='gzip')
+raw_portugal_data = pd.read_csv(PORTUGAL_DATA_PATH, compression='gzip')
 
 raw_train_data = pd.concat(
     [
@@ -29,11 +33,14 @@ raw_train_data = pd.concat(
         raw_germany_data,
         raw_italy_data,
         raw_spain_data,
+        raw_russia_data,
+        raw_portugal_data,
     ],
     ignore_index=True,
 )
 
 raw_train_data = raw_train_data.sort_values(by='season')
+print(raw_train_data.shape)
 raw_train_data.reset_index(inplace=True, drop=True)
 
 with open(FEATURES_PATH) as f:
@@ -135,7 +142,7 @@ both_model_params = {
 
 cv_model_result = CatBoostClassifier(**{
     'loss_function': 'MultiClass',
-    'depth': 6, 'iterations': 2500, 'colsample_bylevel': 0.06, 'boosting_type': 'Plain',
+    'depth': 1, 'iterations': 2500, 'colsample_bylevel': 0.06, 'boosting_type': 'Plain',
     'bootstrap_type': 'Bayesian', 'learning_rate': 0.05, 'l2_leaf_reg': 20, 'auto_class_weights': 'None',
     'random_strength': 7, 'bagging_temperature': 5,
     'verbose': 1000,
@@ -148,8 +155,8 @@ iteration = 0
 
 print(list(cat_features))
 
-START_DATE = '2021-07-01'
-FINISH_DATE = '2021-06-30'
+START_DATE = '2016-12-01'
+FINISH_DATE = '2021-07-01'
 for cv_train, cv_test in get_cv_data_by_time(train, start_date=START_DATE):
     if cv_test.shape[0] == 0:
         print(f"Iteration #{iteration} skipped, no matches")

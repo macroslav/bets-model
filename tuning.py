@@ -12,6 +12,8 @@ FRANCE_DATA_PATH = 'data/france.csv.gz'
 GERMANY_DATA_PATH = 'data/germany.csv.gz'
 ITALY_DATA_PATH = 'data/italy.csv.gz'
 SPAIN_DATA_PATH = 'data/spain.csv.gz'
+RUSSIA_DATA_PATH = 'data/russia.csv.gz'
+PORTUGAL_DATA_PATH = 'data/portugal.csv.gz'
 FEATURES_PATH = 'data/features.yaml'
 
 raw_england_data = pd.read_csv(ENGLAND_DATA_PATH, compression='gzip')
@@ -19,6 +21,8 @@ raw_france_data = pd.read_csv(FRANCE_DATA_PATH, compression='gzip')
 raw_germany_data = pd.read_csv(GERMANY_DATA_PATH, compression='gzip')
 raw_italy_data = pd.read_csv(ITALY_DATA_PATH, compression='gzip')
 raw_spain_data = pd.read_csv(SPAIN_DATA_PATH, compression='gzip')
+raw_russia_data = pd.read_csv(RUSSIA_DATA_PATH, compression='gzip')
+raw_portugal_data = pd.read_csv(PORTUGAL_DATA_PATH, compression='gzip')
 
 raw_train_data = pd.concat(
     [
@@ -27,6 +31,8 @@ raw_train_data = pd.concat(
         raw_germany_data,
         raw_italy_data,
         raw_spain_data,
+        raw_russia_data,
+        raw_portugal_data,
     ],
     ignore_index=True,
 )
@@ -67,12 +73,12 @@ transformer = DataTransformer(transformer_context)
 train, decode_labels = transformer.run_logic()
 train = train.reset_index(drop=True)
 
-train_dataset = train.loc[:45000]
-test_dataset = train.loc[45000:].reset_index()
+train_dataset = train.loc[:52000]
+test_dataset = train.loc[52000:].reset_index(drop=True)
 
 
-y_train = train_dataset.both_target.reset_index()['both_target']
-y_test = test_dataset.both_target.reset_index()['both_target']
+y_train = train_dataset.result_target.reset_index()['result_target']
+y_test = test_dataset.result_target.reset_index()['result_target']
 train_dataset = train_dataset.drop(columns=['result_target', 'total_target', 'both_target'])
 test_dataset = test_dataset.drop(columns=['result_target', 'total_target', 'both_target'])
 
@@ -193,8 +199,8 @@ def objective(trial):
     #  При получении лучших параметров нужно прогонять на них pipeline.py
     #  И фиксировать результаты в https://trello.com/c/uGpuNYUz
     params = {
-        'depth': trial.suggest_int('depth', 1, 5),
-        'iterations': trial.suggest_int('iterations', 50, 5000),
+        'depth': 1,
+        'iterations': trial.suggest_int('iterations', 50, 6000),
         'colsample_bylevel': trial.suggest_float('colsample_bylevel', 0.01, 0.1),
         "boosting_type": trial.suggest_categorical("boosting_type", ["Ordered", "Plain"]),
         "bootstrap_type": trial.suggest_categorical(
@@ -206,8 +212,7 @@ def objective(trial):
         'random_strength': trial.suggest_int('random_strength', 1, 10),
         'random_state': 322,
         'verbose': 1000,
-        'loss_function': 'Logloss',
-        'used_ram_limit': '3.5gb',
+        'loss_function': 'MultiClass',
     }
     if params["bootstrap_type"] == "Bayesian":
         params["bagging_temperature"] = trial.suggest_float("bagging_temperature", 0, 10)
